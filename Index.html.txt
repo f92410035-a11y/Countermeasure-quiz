@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>CyberQuiz · 160 Questions | Premium</title>
+    <style>
+        :root {
+            --bg-deep: #060b1a;
+            --bg-card: rgba(14, 23, 48, 0.7);
+            --bg-card-solid: #0e1730;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.25);
+            --accent-strong: #0ea5e9;
+            --correct: #10b981;
+            --correct-glow: rgba(16, 185, 129, 0.3);
+            --correct-bg: rgba(16, 185, 129, 0.12);
+            --incorrect: #ef4444;
+            --incorrect-glow: rgba(239, 68, 68, 0.3);
+            --incorrect-bg: rgba(239, 68, 68, 0.1);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-subtle: rgba(56, 189, 248, 0.18);
+            --border-card: rgba(255, 255, 255, 0.06);
+            --radius-xl: 24px;
+            --radius-lg: 18px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --radius-pill: 60px;
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.35), 0 1px 4px rgba(56, 189, 248, 0.08);
+            --shadow-glow-accent: 0 0 28px rgba(56, 189, 248, 0.2);
+            --shadow-glow-correct: 0 0 24px rgba(16, 185, 129, 0.25);
+            --shadow-glow-incorrect: 0 0 24px rgba(239, 68, 68, 0.25);
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 16px 12px 48px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ── Animated background orbs ── */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 0;
+            animation: orbFloat 18s ease-in-out infinite;
+        }
+        .bg-orb.orb-1 {
+            width: 420px;
+            height: 420px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+            top: -10%;
+            left: -8%;
+            animation-delay: 0s;
+            animation-duration: 20s;
+        }
+        .bg-orb.orb-2 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            bottom: -8%;
+            right: -6%;
+            animation-delay: -7s;
+            animation-duration: 22s;
+        }
+        .bg-orb.orb-3 {
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
+            top: 50%;
+            left: 60%;
+            animation-delay: -12s;
+            animation-duration: 24s;
+        }
+        .bg-orb.orb-4 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.12) 0%, transparent 70%);
+            top: 30%;
+            left: 15%;
+            animation-delay: -3s;
+            animation-duration: 19s;
+        }
+
+        @keyframes orbFloat {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(60px, -40px) scale(1.08);
+            }
+            50% {
+                transform: translate(-20px, 50px) scale(0.94);
+            }
+            75% {
+                transform: translate(-50px, -30px) scale(1.05);
+            }
+        }
+
+        /* ── Main container ── */
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, #1e3a5f 0%, #0ea5e9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 16px rgba(14, 165, 233, 0.35);
+            flex-shrink: 0;
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+        @keyframes logoPulse {
+            0%,
+            100% {
+                box-shadow: 0 4px 16px rgba(14, 165, 233, 0.35);
+            }
+            50% {
+                box-shadow: 0 6px 26px rgba(56, 189, 248, 0.55);
+            }
+        }
+        .title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .title {
+            font-size: 1.55rem;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            color: #f1f5f9;
+            line-height: 1.2;
+        }
+        .subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+            font-weight: 500;
+        }
+
+        /* ── Stats strip ── */
+        .stats-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+            align-items: center;
+        }
+        .stat-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-pill);
+            padding: 7px 16px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: var(--transition-fast);
+            white-space: nowrap;
+        }
+        .stat-pill.score-pill {
+            background: rgba(56, 189, 248, 0.08);
+            border-color: rgba(56, 189, 248, 0.3);
+            color: #7dd3fc;
+            font-weight: 700;
+            font-size: 0.85rem;
+            gap: 8px;
+            animation: scoreGlow 2.5s ease-in-out infinite;
+        }
+        @keyframes scoreGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 8px rgba(56, 189, 248, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 18px rgba(56, 189, 248, 0.25);
+            }
+        }
+        .stat-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .stat-dot.correct-dot {
+            background: var(--correct);
+            box-shadow: 0 0 8px var(--correct-glow);
+        }
+        .stat-dot.incorrect-dot {
+            background: var(--incorrect);
+            box-shadow: 0 0 8px var(--incorrect-glow);
+        }
+        .stat-dot.remaining-dot {
+            background: #64748b;
+        }
+
+        /* ── Progress bar ── */
+        .progress-wrap {
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .progress-track {
+            height: 6px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8, #22d3bb);
+            background-size: 200% 100%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            animation: shimmer 2.5s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+        .progress-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-align: right;
+            margin-top: 4px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        /* ── Question card (glassmorphism) ── */
+        .question-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 26px 22px;
+            border: 1px solid var(--border-card);
+            box-shadow: var(--shadow-card);
+            margin-bottom: 18px;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+            pointer-events: none;
+        }
+        .question-card.correct-flash {
+            animation: correctFlash 0.6s ease-out;
+        }
+        .question-card.incorrect-flash {
+            animation: incorrectShake 0.5s ease-out;
+        }
+        @keyframes correctFlash {
+            0% {
+                box-shadow: var(--shadow-card), var(--shadow-glow-correct);
+            }
+            100% {
+                box-shadow: var(--shadow-card);
+            }
+        }
+        @keyframes incorrectShake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            15% {
+                transform: translateX(-6px);
+            }
+            30% {
+                transform: translateX(6px);
+            }
+            45% {
+                transform: translateX(-4px);
+            }
+            60% {
+                transform: translateX(4px);
+            }
+            75% {
+                transform: translateX(-2px);
+            }
+            90% {
+                transform: translateX(2px);
+            }
+        }
+
+        .q-badge-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .q-number-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #1e3a5f, #0c4a6e);
+            color: #7dd3fc;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            padding: 5px 14px;
+            border-radius: var(--radius-pill);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            text-transform: uppercase;
+        }
+        .q-difficulty {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+            font-weight: 500;
+        }
+
+        .q-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.55;
+            margin-bottom: 20px;
+            color: #f1f5f9;
+            letter-spacing: -0.1px;
+        }
+
+        /* ── Options ── */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .opt {
+            background: rgba(255, 255, 255, 0.025);
+            border-radius: var(--radius-lg);
+            padding: 15px 18px;
+            border: 1.5px solid rgba(255, 255, 255, 0.07);
+            transition: all var(--transition-smooth);
+            font-size: 0.98rem;
+            line-height: 1.4;
+            word-break: break-word;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .opt:hover {
+            background: rgba(56, 189, 248, 0.06);
+            border-color: rgba(56, 189, 248, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        .opt:active {
+            transform: scale(0.985);
+            transition: transform 0.08s ease;
+        }
+        .opt.selected {
+            background: rgba(56, 189, 248, 0.12);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow), 0 4px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
+        }
+        .opt.correct-reveal {
+            background: var(--correct-bg) !important;
+            border-color: var(--correct) !important;
+            box-shadow: 0 0 0 3px var(--correct-glow), 0 4px 18px rgba(16, 185, 129, 0.2) !important;
+            animation: popCorrect 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .opt.wrong-reveal {
+            background: var(--incorrect-bg) !important;
+            border-color: var(--incorrect) !important;
+            box-shadow: 0 0 0 3px var(--incorrect-glow), 0 4px 18px rgba(239, 68, 68, 0.2) !important;
+        }
+        .opt.disabled {
+            pointer-events: none;
+            opacity: 0.75;
+        }
+        .opt.disabled.correct-reveal {
+            opacity: 1;
+            pointer-events: none;
+        }
+        @keyframes popCorrect {
+            0% {
+                transform: scale(1);
+            }
+            40% {
+                transform: scale(1.03);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .opt input[type="radio"] {
+            display: none;
+        }
+        .opt label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            width: 100%;
+            pointer-events: auto;
+        }
+        .opt.disabled label {
+            cursor: default;
+            pointer-events: none;
+        }
+        .letter-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            transition: all var(--transition-smooth);
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+        }
+        .opt.selected .letter-circle {
+            background: rgba(56, 189, 248, 0.2);
+            color: #7dd3fc;
+            border-color: var(--accent);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+        .opt.correct-reveal .letter-circle {
+            background: rgba(16, 185, 129, 0.25) !important;
+            color: #34d399 !important;
+            border-color: var(--correct) !important;
+            box-shadow: 0 0 14px var(--correct-glow) !important;
+        }
+        .opt.wrong-reveal .letter-circle {
+            background: rgba(239, 68, 68, 0.2) !important;
+            color: #f87171 !important;
+            border-color: var(--incorrect) !important;
+            box-shadow: 0 0 14px var(--incorrect-glow) !important;
+        }
+        .result-icon {
+            margin-left: auto;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            opacity: 0;
+            transform: scale(0);
+            transition: all var(--transition-spring);
+        }
+        .opt.correct-reveal .result-icon,
+        .opt.wrong-reveal .result-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ── Feedback area ── */
+        .feedback-area {
+            margin-top: 16px;
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: none;
+            animation: fadeSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .feedback-area.visible {
+            display: flex;
+        }
+        .feedback-area.correct-fb {
+            border-color: rgba(16, 185, 129, 0.35);
+            background: rgba(16, 185, 129, 0.06);
+        }
+        .feedback-area.incorrect-fb {
+            border-color: rgba(239, 68, 68, 0.35);
+            background: rgba(239, 68, 68, 0.05);
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .feedback-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .feedback-content {
+            flex: 1;
+        }
+        .feedback-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+            letter-spacing: -0.2px;
+        }
+        .correct-fb .feedback-title {
+            color: #34d399;
+        }
+        .incorrect-fb .feedback-title {
+            color: #f87171;
+        }
+        .feedback-detail {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+        .feedback-correct-answer {
+            display: inline-block;
+            margin-top: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+            letter-spacing: 0.2px;
+        }
+
+        /* ── Action bar ── */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 8px 0 20px;
+            align-items: center;
+        }
+        button {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 13px 24px;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: -0.1px;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            white-space: nowrap;
+            flex: 0 1 auto;
+            min-width: 90px;
+            text-align: center;
+        }
+        button:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+        button:active {
+            transform: scale(0.95);
+            transition: transform 0.08s ease;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        button:disabled {
+            opacity: 0.35;
+            pointer-events: none;
+            filter: grayscale(20%);
+        }
+        button.primary-btn {
+            background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 4px 18px rgba(14, 165, 233, 0.3);
+            letter-spacing: 0.1px;
+        }
+        button.primary-btn:hover {
+            box-shadow: 0 8px 28px rgba(14, 165, 233, 0.45);
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #38bdf8, #60a5fa);
+        }
+        button.primary-btn:active {
+            transform: scale(0.94);
+        }
+        button.finish-btn {
+            background: linear-gradient(135deg, #1e3a5f, #0c4a6e);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: #7dd3fc;
+            font-weight: 700;
+        }
+        button.finish-btn:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-glow-accent);
+            background: linear-gradient(135deg, #1e4a6f, #0d5a7e);
+        }
+
+        /* ── Results ── */
+        .results-box {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 32px 22px;
+            text-align: center;
+            border: 1px solid var(--border-card);
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+        .results-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            pointer-events: none;
+        }
+        .results-box h2 {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+            color: #f1f5f9;
+            letter-spacing: -0.3px;
+        }
+        .score-ring {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin: 16px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: conic-gradient(var(--correct) calc(var(--score-pct) * 1%),
+                    rgba(255, 255, 255, 0.06) calc(var(--score-pct) * 1%));
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.2);
+        }
+        .score-inner {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: #0e1730;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 2.8rem;
+            color: #f1f5f9;
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+        .score-inner small {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.2px;
+        }
+        .stats-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 18px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            min-width: 80px;
+            flex: 1 1 auto;
+            max-width: 130px;
+        }
+        .stat-card .stat-val {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .stat-card .stat-lbl {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+        .stat-card.correct-stat .stat-val {
+            color: #34d399;
+        }
+        .stat-card.incorrect-stat .stat-val {
+            color: #f87171;
+        }
+        .stat-card.unanswered-stat .stat-val {
+            color: #94a3b8;
+        }
+        .footnote {
+            margin-top: 22px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 16px;
+            letter-spacing: 0.2px;
+        }
+        .hidden {
+            display: none !important;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .question-card {
+                padding: 20px 14px;
+                border-radius: var(--radius-lg);
+            }
+            .q-text {
+                font-size: 1rem;
+            }
+            .opt {
+                padding: 13px 14px;
+                font-size: 0.9rem;
+                border-radius: var(--radius-md);
+            }
+            .opt label {
+                gap: 10px;
+            }
+            .letter-circle {
+                min-width: 28px;
+                height: 28px;
+                font-size: 0.78rem;
+            }
+            button {
+                padding: 12px 16px;
+                font-size: 0.82rem;
+                border-radius: 40px;
+                min-width: 70px;
+            }
+            .action-bar {
+                gap: 8px;
+            }
+            .title {
+                font-size: 1.3rem;
+            }
+            .stats-strip {
+                gap: 6px;
+            }
+            .stat-pill {
+                padding: 5px 11px;
+                font-size: 0.72rem;
+                gap: 5px;
+            }
+            .results-box {
+                padding: 24px 14px;
+                border-radius: var(--radius-lg);
+            }
+            .score-ring {
+                width: 110px;
+                height: 110px;
+            }
+            .score-inner {
+                width: 84px;
+                height: 84px;
+                font-size: 2.2rem;
+            }
+            .feedback-area {
+                padding: 12px 14px;
+            }
+        }
+        @media (max-width: 380px) {
+            .action-bar {
+                flex-direction: column;
+                gap: 8px;
+            }
+            button {
+                width: 100%;
+                min-width: 0;
+            }
+            .header {
+                gap: 8px;
+            }
+            .logo-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+                border-radius: 10px;
+            }
+            .title {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background orbs -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <div class="bg-orb orb-4"></div>
+
+    <div class="container" id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-icon">🛡️</div>
+            <div class="title-group">
+                <h1 class="title">CyberQuiz</h1>
+                <span class="subtitle">160 Questions · ARPANET · APT · Risk · Social Engineering</span>
+            </div>
+        </header>
+
+        <!-- Stats strip -->
+        <div class="stats-strip" id="statsStrip">
+            <div class="stat-pill score-pill" id="liveScorePill" title="Live score">
+                ⭐ <span id="liveCorrect">0</span>/<span id="liveAnswered">0</span> correct
+            </div>
+            <div class="stat-pill">
+                <span class="stat-dot correct-dot"></span> <span id="countCorrect">0</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-dot incorrect-dot"></span> <span id="countIncorrect">0</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-dot remaining-dot"></span> <span id="countRemaining">160</span> left
+            </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-wrap">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-label" id="progressLabel">0 / 160 answered</div>
+        </div>
+
+        <!-- Quiz area -->
+        <div id="quizArea">
+            <div id="questionContainer" class="question-card">
+                <div class="q-badge-row">
+                    <span class="q-number-badge" id="qNumber">Q1</span>
+                    <span class="q-difficulty" id="qTopic"></span>
+                </div>
+                <div class="q-text" id="qText">Loading question...</div>
+                <div class="options" id="optionsContainer"></div>
+                <div class="feedback-area" id="feedbackArea">
+                    <span class="feedback-icon" id="feedbackIcon"></span>
+                    <div class="feedback-content">
+                        <div class="feedback-title" id="feedbackTitle"></div>
+                        <div class="feedback-detail" id="feedbackDetail"></div>
+                        <span class="feedback-correct-answer" id="feedbackCorrectAnswer" style="display:none;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <button id="prevBtn" class="secondary-btn">◀ Prev</button>
+                <button id="nextBtn" class="primary-btn">Next ▶</button>
+                <button id="finishBtn" class="finish-btn">✓ Finish Quiz</button>
+            </div>
+            <div id="infoMessage" style="font-size:0.82rem; color:#94a3b8; padding:0 4px; text-align:center;"></div>
+        </div>
+
+        <!-- Results area -->
+        <div id="resultsArea" class="results-box hidden">
+            <h2>🏁 Quiz Complete</h2>
+            <div class="score-ring" id="scoreRing" style="--score-pct: 0;">
+                <div class="score-inner">
+                    <span id="finalScoreNum">0</span>
+                    <small>of 160</small>
+                </div>
+            </div>
+            <div style="font-size:1rem; margin-top:6px; color:#94a3b8;" id="finalPctLabel">0%</div>
+            <div class="stats-grid">
+                <div class="stat-card correct-stat">
+                    <div class="stat-val" id="finalCorrect">0</div>
+                    <div class="stat-lbl">✅ Correct</div>
+                </div>
+                <div class="stat-card incorrect-stat">
+                    <div class="stat-val" id="finalIncorrect">0</div>
+                    <div class="stat-lbl">❌ Incorrect</div>
+                </div>
+                <div class="stat-card unanswered-stat">
+                    <div class="stat-val" id="finalUnanswered">0</div>
+                    <div class="stat-lbl">⏳ Unanswered</div>
+                </div>
+            </div>
+            <button id="restartBtn" class="primary-btn" style="margin-top:22px; width:100%; max-width:280px;">↻ Restart Quiz</button>
+            <div class="footnote">All 160 questions · Immediate feedback on every answer</div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ──────────────────────────────────────────────
+            // FULL QUESTION BANK – 160 items preserved
+            // ──────────────────────────────────────────────
+            const QUESTIONS = [
+                { q: "Which of the following best explains why security was not a primary architectural consideration during the development of ARPANET in the 1970s?",
+                    opts: ["The technology was too primitive to support security mechanisms",
+                        "The initial focus was on connectivity and functionality rather than security",
+                        "There were no known threats at the time",
+                        "Security standards were already well-established and considered unnecessary"
+                    ], correct: 1 },
+                { q: "How does a Zero-Day Exploit differ fundamentally from other types of malware or exploits?", opts: [
+                        "It targets only government systems",
+                        "It exploits a previously unknown vulnerability with no available patch",
+                        "It relies on social engineering tactics to gain access",
+                        "It is a type of ransomware demanding payment to decrypt files"
+                    ], correct: 1 },
+                { q: "What distinguishes a Malicious Insider from a Negligent Insider in terms of cybersecurity threats?",
+                    opts: [
+                        "Malicious Insiders use zero-day exploits, while Negligent Insiders use phishing",
+                        "Malicious Insiders intentionally exploit access for gain, whereas Negligent Insiders compromise security inadvertently",
+                        "Malicious Insiders only target physical assets, Negligent Insiders target digital assets",
+                        "Malicious Insiders have limited access, Negligent Insiders have high access privileges"
+                    ], correct: 1 },
+                { q: "According to the risk management concepts covered, which factor most directly influences the likelihood of a threat exploiting a vulnerability?",
+                    opts: ["The asset's monetary value",
+                        "The effectiveness of existing security controls and prevalence of the threat",
+                        "The total number of vulnerabilities", "The organization's cybersecurity budget"
+                    ], correct: 1 },
+                { q: "Considering the characteristics of Nation-State Sponsored Actors, which combination of tactics and motivations is most accurate?",
+                    opts: ["Financial gain; phishing and ransomware campaigns",
+                        "Political/social cause; DDoS and website defacement",
+                        "Espionage and sabotage; zero-day exploits and Advanced Persistent Threats",
+                        "Revenge and negligence; data exfiltration and misconfiguration"
+                    ], correct: 2 },
+                { q: "Which of the following best explains why security was not a primary architectural consideration during the development of ARPANET in the 1970s?",
+                    opts: ["The technology for secure communications was not yet invented.",
+                        "The focus was primarily on achieving connectivity and functionality over security.",
+                        "There was a universal trust among early network users, eliminating the need for security.",
+                        "Security protocols were in place but not enforced by government regulations."
+                    ], correct: 1 },
+                { q: "How do Advanced Persistent Threats (APTs) fundamentally differ from typical malware attacks in the modern cyber threat landscape?",
+                    opts: ["APTs rely solely on phishing techniques, whereas typical malware uses exploits.",
+                        "APTs are short-term, high-impact attacks, unlike typical malware that remains stealthy.",
+                        "APTs involve prolonged, stealthy intrusion aiming at strategic goals, evading detection over time.",
+                        "APTs exclusively target personal devices, while typical malware targets enterprise systems."
+                    ], correct: 2 },
+                { q: "Considering the definitions provided, which scenario best illustrates the difference between a vulnerability and a threat in cybersecurity?",
+                    opts: [
+                        "A software bug that allows unauthorized access is a threat, and hackers exploiting it are vulnerabilities.",
+                        "A hacker attempting to breach a system is a vulnerability, and the unpatched software is the threat.",
+                        "A software bug is a vulnerability; a hacker attempting to exploit it is a threat.",
+                        "There is no difference; the terms are interchangeable."
+                    ], correct: 2 },
+                { q: "In the context of threat actors, why are insiders considered particularly dangerous despite having varied motivations such as negligence or revenge?",
+                    opts: ["Because they often use zero-day exploits unknown to the organization.",
+                        "Because their high level of authorized access enables direct data exfiltration or sabotage.",
+                        "Because they typically have government backing and advanced resources.",
+                        "Because they primarily use DDoS attacks and website defacement."
+                    ], correct: 1 },
+                { q: "When conducting a cybersecurity risk assessment, which factor most directly influences the calculation of risk as 'Likelihood x Impact'?",
+                    opts: ["The number of employees in the organization.",
+                        "The frequency with which a threat can exploit a vulnerability and the severity of resulting damage.",
+                        "The total number of vulnerabilities present in the system, regardless of exploitability.",
+                        "The budget allocated to cybersecurity controls without considering threat prevalence."
+                    ], correct: 1 },
+                { q: "Which statement best explains why early ARPANET development did not prioritize security in its architecture?",
+                    opts: ["Security technologies were not yet invented in the 1970s.",
+                        "The focus was primarily on connectivity and robustness rather than security.",
+                        "The network was intended only for trusted government users, so security was deemed unnecessary.",
+                        "Early computing systems had no vulnerabilities to exploit."
+                    ], correct: 1 },
+                { q: "How do Advanced Persistent Threats (APTs) differ from typical malware attacks in their operational characteristics?",
+                    opts: ["APTs rely solely on phishing, while typical malware uses exploits.",
+                        "APTs are short-term attacks aimed at immediate disruption.",
+                        "APTs involve prolonged, stealthy intrusion with strategic objectives, often leveraging zero-day exploits.",
+                        "Typical malware always requires user interaction, whereas APTs do not."
+                    ], correct: 2 },
+                { q: "Considering the table of threat actor characteristics, which combination of motivation and tactics is most accurately associated with hacktivists?",
+                    opts: ["Financial gain; ransomware and phishing campaigns.",
+                        "Political/social causes; DDoS attacks, website defacement, and doxing.",
+                        "Espionage; zero-day exploits and APTs.", "Revenge; data exfiltration and sabotage."
+                    ], correct: 1 },
+                { q: "In the context of risk management, why is it critical to understand both likelihood and impact when assessing cybersecurity risk?",
+                    opts: ["Because likelihood alone determines how often an incident will occur.",
+                        "Because impact alone dictates how much damage a threat can cause regardless of occurrence.",
+                        "Because risk is a function of both the probability that a threat exploits a vulnerability and the severity of resulting harm, guiding prioritization.",
+                        "Because understanding impact allows organizations to ignore low-likelihood threats."
+                    ], correct: 2 },
+                { q: "Which of the following scenarios best exemplifies the use of social engineering as a common attack vector described in the content?",
+                    opts: [
+                        "Exploiting a zero-day vulnerability in an operating system to execute code remotely.",
+                        "Sending a spear phishing email to a CFO impersonating a trusted vendor to obtain confidential financial data.",
+                        "Deploying ransomware that encrypts files and demands payment.",
+                        "Using a brute-force attack to guess passwords."
+                    ], correct: 1 },
+                { q: "Which characteristic most distinctly separates a worm from a virus in malware taxonomy?", opts: [
+                        "Ability to encrypt files and demand ransom",
+                        "Self-replication and attachment to legitimate programs",
+                        "Independent spreading across networks without user action",
+                        "Disguised as legitimate software to trick the user"
+                    ], correct: 2 },
+                { q: "In the context of nation-state sponsored cyber actors, what is the primary reason zero-day exploits are frequently employed?",
+                    opts: ["To maximize financial gain through ransomware",
+                        "Because they are publicly known and easy to patch",
+                        "To maintain prolonged stealth and strategic advantage",
+                        "To perform website defacement and promote political causes"
+                    ], correct: 2 },
+                { q: "Considering the definitions from the foundational terminology, which scenario best exemplifies a vulnerability?",
+                    opts: ["A firewall rule that blocks all incoming traffic",
+                        "A software bug that allows unauthorized privilege escalation",
+                        "The chance that a ransomware attack will damage operations",
+                        "The sum of all network entry points accessible to outsiders"
+                    ], correct: 1 },
+                { q: "How does the concept of risk integrate both likelihood and impact in cybersecurity risk management?",
+                    opts: ["Risk is the sum of all vulnerabilities multiplied by the number of assets",
+                        "Risk equals the potential damage multiplied by the ease of exploit",
+                        "Risk is the probability of a threat exploiting a vulnerability times the severity of consequences",
+                        "Risk is the total number of threats detected over a period"
+                    ], correct: 2 },
+                { q: "Which of the following threat actor types relies primarily on psychological manipulation rather than technical vulnerabilities, and what is their most common attack vector?",
+                    opts: ["Nation-state; zero-day exploits", "Hacktivists; DDoS", "Cybercriminals; ransomware",
+                        "Social engineers; phishing and pretexting"
+                    ], correct: 3 },
+                // 21-40
+                { q: "Which of the following best explains why security was not a primary architectural consideration in the design of ARPANET during the 1970s?",
+                    opts: [
+                        "The network was designed primarily for commercial transactions requiring high confidentiality.",
+                        "Early computing focused on data integrity and availability rather than external threat mitigation.",
+                        "ARPANET was built with advanced encryption protocols from inception.",
+                        "The developers prioritized defense against zero-day exploits and ransomware."
+                    ], correct: 1 },
+                { q: "How does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?",
+                    opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.",
+                        "They involve short-lived, opportunistic attacks with minimal stealth.",
+                        "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.",
+                        "They exclusively target individual users through malware like adware and spyware."
+                    ], correct: 2 },
+                { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?",
+                    opts: ["Financial gain; ransomware and phishing campaigns.",
+                        "Political activism; DDoS attacks and website defacement.",
+                        "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.",
+                        "Negligence; accidental data leaks and misconfigurations."
+                    ], correct: 2 },
+                { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?",
+                    opts: [
+                        "A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.",
+                        "Risk is the potential damage when a threat exploits a vulnerability.",
+                        "Threats are assets that require protection from vulnerabilities.",
+                        "Vulnerabilities are defense mechanisms that reduce risk from threats."
+                    ], correct: 1 },
+                { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?",
+                    opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+                { q: "Which of the following best explains why cybersecurity was not a primary architectural consideration during the development of the ARPANET in the 1970s?",
+                    opts: ["The technology for encryption and authentication did not exist at the time.",
+                        "The focus was on establishing connectivity and functionality rather than securing the network.",
+                        "Early computing systems were inherently secure due to isolation.",
+                        "Cyber threats did not emerge until the 1980s with the rise of personal computers."
+                    ], correct: 1 },
+                { q: "In the context of cybersecurity, how does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?",
+                    opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.",
+                        "They involve short-lived, opportunistic attacks with minimal stealth.",
+                        "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.",
+                        "They exclusively target individual users through malware like adware and spyware."
+                    ], correct: 2 },
+                { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?",
+                    opts: ["Financial gain; ransomware and phishing campaigns.",
+                        "Political activism; DDoS attacks and website defacement.",
+                        "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.",
+                        "Negligence; accidental data leaks and misconfigurations."
+                    ], correct: 2 },
+                { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?",
+                    opts: [
+                        "A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.",
+                        "Risk is the potential damage when a threat exploits a vulnerability.",
+                        "Threats are assets that require protection from vulnerabilities.",
+                        "Vulnerabilities are defense mechanisms that reduce risk from threats."
+                    ], correct: 1 },
+                { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?",
+                    opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+                // 31-50
+                { q: "Which of the following best explains why security was not a primary architectural consideration in the design of ARPANET during the 1970s?",
+                    opts: [
+                        "The network was designed primarily for commercial transactions requiring high confidentiality.",
+                        "Early computing focused on data integrity and availability rather than external threat mitigation.",
+                        "ARPANET was built with advanced encryption protocols from inception.",
+                        "The developers prioritized defense against zero-day exploits and ransomware."
+                    ], correct: 1 },
+                { q: "How does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?",
+                    opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.",
+                        "They involve short-lived, opportunistic attacks with minimal stealth.",
+                        "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.",
+                        "They exclusively target individual users through malware like adware and spyware."
+                    ], correct: 2 },
+                { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?",
+                    opts: ["Financial gain; ransomware and phishing campaigns.",
+                        "Political activism; DDoS attacks and website defacement.",
+                        "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.",
+                        "Negligence; accidental data leaks and misconfigurations."
+                    ], correct: 2 },
+                { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?",
+                    opts: [
+                        "A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.",
+                        "Risk is the potential damage when a threat exploits a vulnerability.",
+                        "Threats are assets that require protection from vulnerabilities.",
+                        "Vulnerabilities are defense mechanisms that reduce risk from threats."
+                    ], correct: 1 },
+                { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?",
+                    opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+                { q: "Which of the following best explains why cybersecurity was not a primary architectural consideration during the development of the ARPANET in the 1970s?",
+                    opts: ["The technology for encryption and authentication did not exist at the time.",
+                        "The focus was on establishing connectivity and functionality rather than securing the network.",
+                        "Early computing systems were inherently secure due to isolation.",
+                        "Cyber threats did not emerge until the 1980s with the rise of personal computers."
+                    ], correct: 1 },
+                { q: "In the context of cybersecurity, how does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?",
+                    opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.",
+                        "They involve short-lived, opportunistic attacks with minimal stealth.",
+                        "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.",
+                        "They exclusively target individual users through malware like adware and spyware."
+                    ], correct: 2 },
+                { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?",
+                    opts: ["Financial gain; ransomware and phishing campaigns.",
+                        "Political activism; DDoS attacks and website defacement.",
+                        "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.",
+                        "Negligence; accidental data leaks and misconfigurations."
+                    ], correct: 2 },
+                { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?",
+                    opts: [
+                        "A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.",
+                        "Risk is the potential damage when a threat exploits a vulnerability.",
+                        "Threats are assets that require protection from vulnerabilities.",
+                        "Vulnerabilities are defense mechanisms that reduce risk from threats."
+                    ], correct: 1 },
+                { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?",
+                    opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+                // 41-50
+                { q: "Which of the following best explains why security was not a primary architectural consideration in the design of ARPANET during the 1970s?",
+                    opts: [
+                        "The network was designed primarily for commercial transactions requiring high confidentiality.",
+                        "Early computing focused on data integrity and availability rather than external threat mitigation.",
+                        "ARPANET was built with advanced encryption protocols from inception.",
+                        "The developers prioritized defense against zero-day exploits and ransomware."
+                    ], correct: 1 },
+                { q: "How does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?",
+                    opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.",
+                        "They involve short-lived, opportunistic attacks with minimal stealth.",
+                        "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.",
+                        "They exclusively target individual users through malware like adware and spyware."
+                    ], correct: 2 },
+                { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?",
+                    opts: ["Financial gain; ransomware and phishing campaigns.",
+                        "Political activism; DDoS attacks and website defacement.",
+                        "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.",
+                        "Negligence; accidental data leaks and misconfigurations."
+                    ], correct: 2 },
+                { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?",
+                    opts: [
+                        "A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.",
+                        "Risk is the potential damage when a threat exploits a vulnerability.",
+                        "Threats are assets that require protection from vulnerabilities.",
+                        "Vulnerabilities are defense mechanisms that reduce risk from threats."
+                    ], correct: 1 },
+                { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?",
+                    opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+                { q: "Which of the following best explains why security was not a primary architectural consideration during the development of the ARPANET in the 1970s?",
+                    opts: ["The technology for encryption and authentication did not exist at the time.",
+                        "The focus was on establishing connectivity and functionality rather than securing the network.",
+                        "Early computing systems were inherently secure due to isolation.",
+                        "Cyber threats did not emerge until the 1980s with the rise of personal computers."
+                    ], correct: 1 },
+                { q: "In the context of cybersecurity, how does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?",
+                    opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.",
+                        "They involve short-lived, opportunistic attacks with minimal stealth.",
+                        "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.",
+                        "They exclusively target individual users through malware like adware and spyware."
+                    ], correct: 2 },
+                { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?",
+                    opts: ["Financial gain; ransomware and phishing campaigns.",
+                        "Political activism; DDoS attacks and website defacement.",
+                        "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.",
+                        "Negligence; accidental data leaks and misconfigurations."
+                    ], correct: 2 },
+                { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?",
+                    opts: [
+                        "A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.",
+                        "Risk is the potential damage when a threat exploits a vulnerability.",
+                        "Threats are assets that require protection from vulnerabilities.",
+                        "Vulnerabilities are defense mechanisms that reduce risk from threats."
+                    ], correct: 1 },
+                { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?",
+                    opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+                // 51-60
+                { q: "Which early computing era development marked a significant shift from physical to logical security focusing on authentication mechanisms?",
+                    opts: ["1970s ARPANET implementation", "1960s time-sharing systems", "1988 Morris Worm incident",
+                        "Late 1960s RAND Corporation research"
+                    ], correct: 1 },
+                { q: "What was a primary reason that security was not initially a central architectural consideration in the design of ARPANET in the 1970s?",
+                    opts: ["The network was only intended for military use",
+                        "The threat landscape was not yet well understood",
+                        "Hardware limitations prevented security implementations",
+                        "Developers prioritized speed and connectivity over security"
+                    ], correct: 3 },
+                { q: "How do Advanced Persistent Threats (APTs) differ from typical malware attacks in terms of attacker objectives and behavior?",
+                    opts: ["APTs focus on rapid financial theft using ransomware",
+                        "APTs are short-lived and noisy attacks designed for immediate impact",
+                        "APTs are sophisticated, stealthy, and aim for prolonged undetected access",
+                        "APTs exploit only publicly known vulnerabilities"
+                    ], correct: 2 },
+                { q: "According to the content, which of the following best describes the relationship between cyber risk and vulnerabilities?",
+                    opts: ["Vulnerabilities are the external threats that exploit systems",
+                        "Risk arises when a threat exploits a vulnerability causing potential loss",
+                        "Risk is the vulnerability itself regardless of threat presence",
+                        "Vulnerabilities increase only when no attacks have been detected"
+                    ], correct: 1 },
+                { q: "Among the malware types listed, which one is characterized by independent self-replication and spreading across networks without attaching to other programs?",
+                    opts: ["Trojan Horse", "Virus", "Worm", "Ransomware"], correct: 2 },
+                { q: "Which threat actor group is most likely to use zero-day exploits and advanced persistent threats to achieve strategic national objectives?",
+                    opts: ["Cybercriminals", "Hacktivists", "Nation-state sponsored", "Insider threat"], correct: 2 },
+                { q: "What is the primary difference between malicious insiders and negligent insiders as defined in the threat actor taxonomy?",
+                    opts: ["Malicious insiders use hacking tools, negligent insiders do not",
+                        "Malicious insiders have external motivations, negligent insiders internal",
+                        "Malicious insiders intentionally exploit access, negligent insiders cause harm unintentionally",
+                        "Malicious insiders target financial gain, negligent insiders target sabotage"
+                    ], correct: 2 },
+                { q: "Which social engineering technique uniquely targets high-profile executives with tailored phishing attacks?",
+                    opts: ["Whaling", "Baiting", "Spear phishing", "Pretexting"], correct: 0 },
+                { q: "How is 'risk' quantitatively conceptualized in cybersecurity risk management as per the content?",
+                    opts: ["Risk equals the sum of all threats and vulnerabilities",
+                        "Risk equals the product of likelihood and impact of an adverse event",
+                        "Risk is the inverse of system availability and integrity",
+                        "Risk is measured solely by the financial cost of incidents"
+                    ], correct: 1 },
+                { q: "In risk management, what factor primarily influences the 'likelihood' component when assessing the risk posed by a threat exploiting a vulnerability?",
+                    opts: ["The asset's criticality",
+                        "The effectiveness of existing controls and threat prevalence", "The cost of recovery",
+                        "The number of users"
+                    ], correct: 1 },
+                // 61-70
+                { q: "Which of the following best explains why security was not a primary architectural consideration during the development of the ARPANET in the 1970s?",
+                    opts: ["The technology was too primitive to support security features",
+                        "The focus was on connectivity and networking functionality over security",
+                        "Security was considered unnecessary because users were trusted",
+                        "Encryption algorithms were not yet invented"
+                    ], correct: 1 },
+                { q: "The 1988 Morris Worm is considered a landmark event in cybersecurity because it was:", opts: [
+                        "The first known ransomware attack targeting financial institutions",
+                        "A self-replicating malicious code that exposed vulnerabilities in networked systems",
+                        "The first use of zero-day exploits by nation-state actors",
+                        "An insider attack causing widespread data theft"
+                    ], correct: 1 },
+                { q: "How do Advanced Persistent Threats (APTs) differ fundamentally from typical cybercriminal attacks?", opts: [
+                        "APTs rely solely on phishing while cybercriminals use malware",
+                        "APTs are short-term, opportunistic intrusions with limited goals",
+                        "APTs involve sophisticated, prolonged, and stealthy operations often linked to nation-states",
+                        "Cybercriminals always use zero-day exploits, whereas APTs do not"
+                    ], correct: 2 },
+                { q: "In the context of cybersecurity, what distinguishes a vulnerability from a threat?", opts: [
+                        "A vulnerability is a potential attacker, whereas a threat is a software tool",
+                        "A vulnerability is a weakness in a system, while a threat is a potential danger exploiting that weakness",
+                        "Vulnerability refers to external dangers, threat refers to internal dangers", "They are the same concept"
+                    ], correct: 1 },
+                { q: "Which malware type is characterized by self-replication and the ability to spread independently across networks without attaching to other programs?",
+                    opts: ["Virus", "Trojan Horse", "Worm", "Ransomware"], correct: 2 },
+                { q: "Among social engineering tactics, which specifically targets high-profile executives and uses personalized information to deceive?",
+                    opts: ["Spear phishing", "Whaling", "Baiting", "Pretexting"], correct: 1 },
+                { q: "Nation-state sponsored threat actors are most likely to employ which of the following tactics?", opts: [
+                        "Distributed Denial of Service attacks and website defacement",
+                        "Ransomware campaigns targeting random victims for financial gain",
+                        "Advanced Persistent Threats and zero-day exploits to achieve strategic espionage goals",
+                        "Negligent insider actions due to misconfiguration and errors"
+                    ], correct: 2 },
+                { q: "According to the risk formula presented, which factor directly affects the likelihood component in cybersecurity risk management?",
+                    opts: ["The financial impact of a data breach",
+                        "The severity of legal consequences after an attack",
+                        "The prevalence of the threat and effectiveness of existing security controls",
+                        "The asset's inherent value regardless of threats"
+                    ], correct: 2 },
+                { q: "Which statement correctly differentiates authentication from authorization in cybersecurity?",
+                    opts: [
+                        "Authentication verifies user identity; authorization determines access privileges after authentication",
+                        "Authentication only applies to biometric methods; authorization applies to passwords",
+                        "Authorization verifies identity; authentication assigns permissions",
+                        "Both terms refer to the same security process and are interchangeable"
+                    ], correct: 0 },
+                { q: "The economic impact of cyberattacks includes all EXCEPT which of the following?", opts: [
+                        "Theft of intellectual property and financial assets",
+                        "Ransomware payments and fraud losses",
+                        "Legal liabilities and damage to brand reputation",
+                        "Guaranteed recovery of all lost data without cost"
+                    ], correct: 3 },
+                // 71-80
+                { q: "Which statement best explains why security was not a primary architectural consideration during the development of ARPANET in the 1970s?",
+                    opts: ["The technology was too primitive to implement security measures",
+                        "The network was designed primarily for trusted academic and military users",
+                        "Security protocols had not yet been invented",
+                        "The focus was on commercial applications rather than research networks"
+                    ], correct: 1 },
+                { q: "In the context of the 1988 Morris Worm incident, what made this event a landmark in cybersecurity history?",
+                    opts: ["It was the first known use of ransomware attacks",
+                        "It was a self-replicating malicious code that caused widespread disruption",
+                        "It exploited a zero-day vulnerability in cloud infrastructure",
+                        "It was the first cyber espionage attack sponsored by a nation-state"
+                    ], correct: 1 },
+                { q: "Which of the following best characterizes Advanced Persistent Threats (APTs) as described in the modern cybersecurity era?",
+                    opts: ["Brief, opportunistic attacks focused on financial gain",
+                        "Sophisticated, prolonged attacks designed to remain undetected",
+                        "Malware that spreads automatically without user interaction",
+                        "Attacks that only target mobile devices"
+                    ], correct: 1 },
+                { q: "Considering the economic impact of cyberattacks, why does the World Economic Forum rank them among the top global risks?",
+                    opts: ["Because they primarily affect only financial institutions",
+                        "Due to their potential to cause theft, fraud, reputational damage, and legal liabilities across sectors",
+                        "Because cyberattacks rarely cause tangible harm and are mostly theoretical risks",
+                        "Since cyberattacks are limited to personal devices and have minimal societal impact"
+                    ], correct: 1 },
+                { q: "Which of the following correctly differentiates between a worm and a virus in terms of propagation?",
+                    opts: ["Worms require user intervention to replicate, viruses spread independently",
+                        "Viruses self-replicate and spread independently, worms attach to legitimate programs",
+                        "Worms self-replicate and spread independently across networks, viruses attach to legitimate programs",
+                        "Viruses encrypt files for ransom, worms are designed for espionage"
+                    ], correct: 2 },
+                { q: "Which threat actor type is most likely to utilize zero-day exploits and conduct espionage with strategic, long-term goals?",
+                    opts: ["Hacktivists", "Cybercriminals", "Nation-State Sponsored Actors", "Malicious Insiders"],
+                    correct: 2 },
+                { q: "How do negligent insiders commonly compromise organizational security, according to the threat actor classifications?",
+                    opts: ["By deliberately stealing sensitive data for personal gain",
+                        "Through inadvertent actions such as falling for phishing attacks or misconfiguration",
+                        "By launching sophisticated zero-day exploits", "By performing DDoS attacks"
+                    ], correct: 1 },
+                { q: "What distinguishes spear phishing from general phishing in social engineering attack vectors?", opts: [
+                        "Spear phishing targets random users, phishing targets specific individuals",
+                        "Spear phishing uses malware, phishing only uses email scams",
+                        "Spear phishing targets specific individuals with tailored content, phishing is broadly targeted",
+                        "Spear phishing is a physical attack vector, phishing is digital only"
+                    ], correct: 2 },
+                { q: "In the risk management equation Risk = Likelihood x Impact, which factor is influenced by the effectiveness of controls and prevalence of threats?",
+                    opts: ["Impact", "Likelihood", "Asset Value", "Vulnerability"], correct: 1 },
+                { q: "Within the context of cybersecurity fundamentals, which term best describes a software, data, or command sequence that takes advantage of a bug or vulnerability?",
+                    opts: ["Threat", "Risk", "Exploit", "Firewall"], correct: 2 },
+                // 81-160 True/False
+                { q: "The primary architectural design of the ARPANET in the 1970s prioritized security as its main focus.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Advanced Persistent Threats (APTs) are characterized by their prolonged, stealthy presence within targeted systems, often utilizing zero-day exploits.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Nation-state sponsored threat actors typically have low resources and use simple tactics such as phishing and ransomware.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Social engineering attacks exploit technical vulnerabilities in software systems rather than human psychology.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Ransomware operates by encrypting victim files and demanding a ransom for their release, representing a distinct malware category.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Insiders who inadvertently cause security breaches through negligence primarily pose threats due to their malicious intent.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "The risk in cybersecurity can be quantified as the product of the likelihood of a threat exploiting a vulnerability and the impact of that exploitation.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Authentication and authorization serve the same function of verifying a user's identity in cybersecurity processes.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Pretexting involves creating a fabricated scenario to deceive individuals into divulging confidential information.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "The expansion of personal computers and commercialization of the internet in the 1980s and 1990s led to a reduced attack surface for cyber threats.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "The Morris Worm of 1988 was the first instance of self-replicating malicious code that brought widespread attention to cybersecurity vulnerabilities.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Advanced Persistent Threats (APTs) typically involve short, high-intensity attacks that are quickly detected and mitigated.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "According to the content, social engineering primarily exploits technical software vulnerabilities rather than human psychology.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Nation-state sponsored threat actors are characterized by high resources and often use zero-day exploits and APT tactics to achieve strategic objectives.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Ransomware encrypts files on a victim's system and typically demands payment in exchange for the decryption key.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Negligent insiders intentionally compromise security to gain personal benefits, whereas malicious insiders unknowingly cause security breaches.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "The attack surface is defined as the total number of vulnerabilities present in a system's software code.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Whaling attacks are a form of spear phishing that specifically targets high-profile executives within an organization.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Business Impact Analysis (BIA) focuses on assessing the likelihood that a threat will exploit a vulnerability rather than the severity of the impact.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Cybercriminals rely primarily on politically motivated tactics such as DDoS and website defacement to achieve their goals.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "The Morris Worm of 1988 was the first example of a self-replicating malicious code that highlighted the vulnerabilities of networked systems.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "The development of ARPANET in the 1970s prioritized security as a core architectural feature from its inception.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Advanced Persistent Threats (APTs) are characterized by their ability to remain undetected in a system for extended periods, often using zero-day exploits.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Cybersecurity regulations such as GDPR and CCPA primarily focus on protecting critical infrastructure rather than individual personal data.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "A worm differs from a virus because it can self-replicate and spread independently across networks without needing to attach to a host program.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Nation-state sponsored threat actors generally have limited resources and primarily use unsophisticated tactics like phishing.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Whaling attacks are a form of phishing that specifically targets high-level executives within an organization.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "In cybersecurity risk management, risk is primarily determined by the inherent value of assets without considering the likelihood of threat exploitation.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Insider threats can only be malicious actors deliberately exploiting their access and do not include negligent insiders who accidentally compromise security.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "The attack surface is defined as the total number of vulnerabilities within a system regardless of whether they are accessible to unauthorized users.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "The Morris Worm of 1988 was significant primarily because it was the first instance of a self-replicating malicious code that exploited network vulnerabilities without any user interaction.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Advanced Persistent Threats (APTs) are characterized by their short duration and rapid execution designed to cause immediate visible damage.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "The primary motivation of hacktivists is financial gain, and their typical tactics include ransomware and phishing campaigns.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Zero-day exploits refer to attacks that exploit known vulnerabilities for which patches have already been released but not yet applied by the victim.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Insiders can pose security risks both through intentional malicious actions and unintentional negligent behaviors, such as falling victim to phishing attacks.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Social engineering attacks rely predominantly on exploiting technical vulnerabilities in software rather than psychological manipulation of individuals.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Nation-state sponsored threat actors often utilize high sophistication tactics including zero-day exploits and APTs to achieve strategic espionage and sabotage goals.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "The attack surface of a system is limited only to external network entry points and does not include software vulnerabilities or insider access points.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Risk in cybersecurity is often quantified as the product of the likelihood of a threat exploiting a vulnerability and the impact this exploitation would have.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Firewalls and Intrusion Prevention Systems (IPS) both function primarily by monitoring network traffic, but only IPS has the capability to block detected malicious activity.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "The Morris Worm of 1988 was significant primarily because it was the first instance of a self-replicating malicious code that highlighted the vulnerabilities of networked systems.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Despite the ARPANET's development in the 1970s, security was a primary architectural consideration from its inception.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Advanced Persistent Threats (APTs) are characterized by short-term, high-volume attacks designed to cause immediate damage rather than prolonged undetected presence.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "The economic impact of cyberattacks extends beyond direct financial losses to include legal liabilities and damage to organizational reputation.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Cybersecurity regulations like GDPR and CCPA primarily focus on protecting individuals' personal data and privacy in digital environments.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "A worm, unlike a virus, requires user interaction to spread by attaching itself to legitimate programs.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Zero-day exploits take advantage of vulnerabilities that are already known and patched by software vendors.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Nation-state sponsored threat actors typically have high resource availability and often employ zero-day exploits and APT tactics to achieve strategic objectives.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Negligent insiders pose a security risk through intentional sabotage and espionage within an organization.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "The risk in cybersecurity is commonly quantified as the product of the likelihood of a threat exploiting a vulnerability and the potential impact of that exploitation.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "The ARPANET, developed in the 1970s, was originally designed with strong security measures as a primary architectural consideration.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Advanced Persistent Threats (APTs) are characterized by their prolonged and undetected presence within targeted systems, often utilizing zero-day exploits.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "According to the content, ransomware is classified as malware that encrypts files and demands payment for their release.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Hacktivists typically leverage ransomware attacks to achieve their political or social objectives.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Insiders who unintentionally compromise security due to negligence, such as falling for phishing attacks, are considered a significant threat actor category.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "The attack surface is defined as the sum of all possible points where an unauthorized user can attempt to enter or extract data, encompassing both system vulnerabilities and exposed interfaces.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Spear phishing differs from general phishing in that it targets specific individuals within an organization, often using tailored information.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "The risk in cybersecurity is calculated solely based on the likelihood of a threat exploiting a vulnerability, without considering the impact of the event.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Social engineering attacks exploit technical vulnerabilities in software systems rather than human psychology.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Zero-day exploits refer to attacks that exploit vulnerabilities which are publicly known and have available patches.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "The Morris Worm of 1988 was significant primarily because it was the first instance of a self-replicating malicious code that exploited network vulnerabilities.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "During the 1970s ARPANET development, security was a primary focus in the network's architectural design.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Advanced Persistent Threats (APTs) are characterized by short, high-impact attacks that are easily detectable.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Supply chain attacks target vulnerabilities within third-party vendors or software providers to compromise a primary target.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "The General Data Protection Regulation (GDPR) and California Consumer Privacy Act (CCPA) are examples of regulations primarily designed to secure critical national infrastructure.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "A Trojan Horse malware type is distinguished by its ability to self-replicate and spread independently across networks.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Zero-day exploits take advantage of known vulnerabilities for which patches or fixes are already available.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Nation-state sponsored threat actors typically utilize zero-day exploits and advanced persistent threats to achieve strategic and long-term objectives.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Whaling is a social engineering attack vector that indiscriminately targets a large number of users to maximize impact.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Risk in cybersecurity management is quantitatively defined as the product of the likelihood of an event and the potential impact of that event.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "The Morris Worm of 1988 was significant because it was the first instance where security was a primary architectural consideration in network design.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Advanced Persistent Threats (APTs) are characterized by their prolonged, stealthy nature and use of sophisticated techniques to remain undetected over long periods.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "According to the content, social engineering attacks like phishing primarily exploit system vulnerabilities rather than human psychology.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Nation-state sponsored threat actors typically possess high resources and often utilize zero-day exploits in their strategic cyber espionage operations.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Insider threats are always malicious in intent and do not include negligent behavior that inadvertently compromises security.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "The attack surface is defined as the total number of vulnerabilities present in a system's software code.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Encryption serves the purpose of converting information into a code to prevent unauthorized access, thereby protecting data confidentiality.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Baiting, a form of social engineering, involves inventing a fabricated scenario to deceive targets into revealing sensitive information.",
+                    opts: ["True", "False"], correct: 1 },
+                { q: "Risk in cybersecurity is often quantified as the product of the likelihood of a threat exploiting a vulnerability and the impact of that exploitation.",
+                    opts: ["True", "False"], correct: 0 },
+                { q: "Firewalls and Intrusion Prevention Systems (IPS) both actively block potential threats, whereas Intrusion Detection Systems (IDS) only monitor and alert without prevention capabilities.",
+                    opts: ["True", "False"], correct: 0 }
+            ];
+
+            console.assert(QUESTIONS.length === 160, 'Expected 160 questions, got ' + QUESTIONS.length);
+
+            // ── State ──
+            const totalQ = QUESTIONS.length;
+            const userAnswers = new Array(totalQ).fill(null);
+            const revealed = new Array(totalQ).fill(false);
+            let currentIndex = 0;
+
+            // ── DOM refs ──
+            const qContainer = document.getElementById('questionContainer');
+            const qNumber = document.getElementById('qNumber');
+            const qText = document.getElementById('qText');
+            const qTopic = document.getElementById('qTopic');
+            const optionsContainer = document.getElementById('optionsContainer');
+            const feedbackArea = document.getElementById('feedbackArea');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackTitle = document.getElementById('feedbackTitle');
+            const feedbackDetail = document.getElementById('feedbackDetail');
+            const feedbackCorrectAnswer = document.getElementById('feedbackCorrectAnswer');
+            const progressFill = document.getElementById('progressFill');
+            const progressLabel = document.getElementById('progressLabel');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const finishBtn = document.getElementById('finishBtn');
+            const quizArea = document.getElementById('quizArea');
+            const resultsArea = document.getElementById('resultsArea');
+            const restartBtn = document.getElementById('restartBtn');
+            const infoMsg = document.getElementById('infoMessage');
+            const liveCorrect = document.getElementById('liveCorrect');
+            const liveAnswered = document.getElementById('liveAnswered');
+            const countCorrect = document.getElementById('countCorrect');
+            const countIncorrect = document.getElementById('countIncorrect');
+            const countRemaining = document.getElementById('countRemaining');
+
+            // ── Compute stats ──
+            function computeStats() {
+                let correct = 0;
+                let incorrect = 0;
+                let answered = 0;
+                for (let i = 0; i < totalQ; i++) {
+                    if (revealed[i]) {
+                        answered++;
+                        if (userAnswers[i] === QUESTIONS[i].correct) correct++;
+                        else incorrect++;
+                    }
+                }
+                return { correct, incorrect, answered, remaining: totalQ - answered };
+            }
+
+            function updateStatsUI() {
+                const stats = computeStats();
+                liveCorrect.textContent = stats.correct;
+                liveAnswered.textContent = stats.answered;
+                countCorrect.textContent = stats.correct;
+                countIncorrect.textContent = stats.incorrect;
+                countRemaining.textContent = stats.remaining;
+                const pct = stats.answered > 0 ? Math.round((stats.correct / stats.answered) * 100) : 0;
+                const progressPct = Math.round((stats.answered / totalQ) * 100);
+                progressFill.style.width = progressPct + '%';
+                progressLabel.textContent = stats.answered + ' / ' + totalQ + ' answered';
+                // Update live score pill text
+                const pill = document.getElementById('liveScorePill');
+                if (pill && stats.answered > 0) {
+                    pill.innerHTML =
+                        '⭐ <span id="liveCorrect">' + stats.correct + '</span>/<span id="liveAnswered">' + stats
+                        .answered + '</span> correct (' + pct + '%)';
+                } else if (pill && stats.answered === 0) {
+                    pill.innerHTML =
+                        '⭐ <span id="liveCorrect">0</span>/<span id="liveAnswered">0</span> correct';
+                }
+                // Refresh refs after innerHTML
+                window.liveCorrect = document.getElementById('liveCorrect');
+                window.liveAnswered = document.getElementById('liveAnswered');
+            }
+
+            // ── Explanation generator ──
+            function generateExplanation(qObj, userIdx) {
+                const qTextLower = qObj.q.toLowerCase();
+                const correctAnswerText = qObj.opts[qObj.correct];
+                const userAnswerText = userIdx !== null ? qObj.opts[userIdx] : '';
+                const isCorrect = userIdx === qObj.correct;
+
+                let conceptNote = '';
+                if (qTextLower.includes('arpanet') || (qTextLower.includes('1970s') && qTextLower.includes(
+                        'security'))) {
+                    conceptNote =
+                        'ARPANET was designed primarily for connectivity and functionality. Security was not a major concern in the early days of networking.';
+                } else if (qTextLower.includes('advanced persistent threat') || qTextLower.includes('apt')) {
+                    conceptNote =
+                        'APTs are prolonged, stealthy campaigns often backed by nation-states, using sophisticated techniques to remain undetected.';
+                } else if (qTextLower.includes('zero-day')) {
+                    conceptNote =
+                        'Zero-day exploits target vulnerabilities unknown to software vendors, meaning no patch exists at the time of attack.';
+                } else if (qTextLower.includes('nation-state') || qTextLower.includes('nation state')) {
+                    conceptNote =
+                        'Nation-state actors have high resources and use advanced tactics like APTs and zero-day exploits for strategic goals.';
+                } else if (qTextLower.includes('risk') && (qTextLower.includes('likelihood') || qTextLower.includes(
+                        'impact'))) {
+                    conceptNote =
+                        'Risk = Likelihood × Impact. Both the probability of exploitation and the severity of consequences matter.';
+                } else if (qTextLower.includes('worm') && qTextLower.includes('virus')) {
+                    conceptNote =
+                        'Worms self-replicate and spread independently across networks. Viruses require attachment to a host program and often need user action.';
+                } else if (qTextLower.includes('social engineering') || qTextLower.includes('pretexting') || qTextLower
+                    .includes('phishing') || qTextLower.includes('whaling') || qTextLower.includes('baiting')) {
+                    conceptNote =
+                        'Social engineering exploits human psychology rather than technical vulnerabilities to gain access or information.';
+                } else if (qTextLower.includes('insider') || qTextLower.includes('negligent') || qTextLower.includes(
+                        'malicious insider')) {
+                    conceptNote =
+                        'Malicious insiders intentionally exploit their access. Negligent insiders cause harm unintentionally through errors or falling for scams.';
+                } else if (qTextLower.includes('morris worm') || qTextLower.includes('1988')) {
+                    conceptNote =
+                        'The Morris Worm (1988) was a landmark self-replicating attack that exposed widespread network vulnerabilities.';
+                } else if (qTextLower.includes('authentication') && qTextLower.includes('authorization')) {
+                    conceptNote =
+                        'Authentication verifies identity (who you are). Authorization determines what you can access (permissions).';
+                } else if (qTextLower.includes('ransomware')) {
+                    conceptNote =
+                        'Ransomware encrypts victim files and demands payment (ransom) for the decryption key.';
+                } else if (qTextLower.includes('attack surface')) {
+                    conceptNote =
+                        'The attack surface encompasses all points where an attacker can attempt to enter or extract data from a system.';
+                } else if (qTextLower.includes('gdpr') || qTextLower.includes('ccpa')) {
+                    conceptNote =
+                        'GDPR and CCPA are data privacy regulations focused on protecting individuals\' personal information.';
+                } else if (qTextLower.includes('trojan')) {
+                    conceptNote =
+                        'A Trojan Horse disguises itself as legitimate software but contains malicious functionality. It does not self-replicate.';
+                } else if (qTextLower.includes('firewall') || qTextLower.includes('ips') || qTextLower.includes('ids')) {
+                    conceptNote =
+                        'Firewalls filter traffic. IDS monitors and alerts. IPS can actively block detected threats.';
+                } else if (qTextLower.includes('supply chain')) {
+                    conceptNote =
+                        'Supply chain attacks compromise third-party vendors or software providers to reach the primary target.';
+                } else if (qTextLower.includes('hacktivist')) {
+                    conceptNote =
+                        'Hacktivists are motivated by political or social causes, using tactics like DDoS and website defacement.';
+                } else if (qTextLower.includes('encryption')) {
+                    conceptNote =
+                        'Encryption converts data into coded form to protect confidentiality and prevent unauthorized access.';
+                } else {
+                    conceptNote = 'Understanding core cybersecurity concepts helps build a strong security foundation.';
+                }
+
+                if (isCorrect) {
+                    return {
+                        title: '✅ Correct!',
+                        detail: 'You selected the right answer: "' + correctAnswerText + '". ' + conceptNote,
+                        isCorrect: true
+                    };
+                } else {
+                    return {
+                        title: '❌ Incorrect',
+                        detail: 'You selected: "' + userAnswerText + '". The correct answer is: "' +
+                            correctAnswerText + '". ' + conceptNote,
+                        isCorrect: false
+                    };
+                }
+            }
+
+            // ── Extract topic from question ──
+            function getTopic(qObj) {
+                const t = qObj.q.toLowerCase();
+                if (t.includes('arpanet') || t.includes('1970s')) return 'ARPANET History';
+                if (t.includes('apt') || t.includes('advanced persistent')) return 'Advanced Persistent Threats';
+                if (t.includes('zero-day')) return 'Zero-Day Exploits';
+                if (t.includes('nation-state') || t.includes('nation state')) return 'Nation-State Actors';
+                if (t.includes('risk')) return 'Risk Management';
+                if (t.includes('worm') || t.includes('virus')) return 'Malware Taxonomy';
+                if (t.includes('social engineering') || t.includes('phishing') || t.includes('pretexting') || t
+                    .includes('whaling') || t.includes('baiting')) return 'Social Engineering';
+                if (t.includes('insider') || t.includes('negligent')) return 'Insider Threats';
+                if (t.includes('morris worm') || t.includes('1988')) return 'Morris Worm';
+                if (t.includes('authentication') && t.includes('authorization')) return 'Auth Concepts';
+                if (t.includes('ransomware')) return 'Ransomware';
+                if (t.includes('attack surface')) return 'Attack Surface';
+                if (t.includes('gdpr') || t.includes('ccpa')) return 'Regulations';
+                if (t.includes('trojan')) return 'Trojan Horse';
+                if (t.includes('firewall') || t.includes('ips') || t.includes('ids')) return 'Network Security';
+                if (t.includes('supply chain')) return 'Supply Chain';
+                if (t.includes('hacktivist')) return 'Hacktivism';
+                if (t.includes('encryption')) return 'Encryption';
+                return 'General';
+            }
+
+            // ── Render question ──
+            function renderQuestion(index) {
+                const q = QUESTIONS[index];
+                if (!q) return;
+                qNumber.textContent = 'Q' + (index + 1);
+                qText.textContent = q.q;
+                qTopic.textContent = '· ' + getTopic(q);
+                const selectedIdx = userAnswers[index];
+                const isRevealed = revealed[index];
+                const letters = ['A', 'B', 'C', 'D'];
+                const resultIcons = ['', ''];
+
+                let html = '';
+                q.opts.forEach((optText, i) => {
+                    let classes = 'opt';
+                    if (selectedIdx === i) classes += ' selected';
+                    if (isRevealed) {
+                        if (i === q.correct) classes += ' correct-reveal';
+                        else if (selectedIdx === i && i !== q.correct) classes += ' wrong-reveal';
+                        classes += ' disabled';
+                    }
+                    const checkedAttr = (selectedIdx === i) ? 'checked' : '';
+                    let iconHtml = '';
+                    if (isRevealed && i === q.correct) iconHtml =
+                        '<span class="result-icon">✅</span>';
+                    if (isRevealed && selectedIdx === i && i !== q.correct) iconHtml =
+                        '<span class="result-icon">❌</span>';
+                    html += `
+                <div class="${classes}" data-optidx="${i}">
+                  <label>
+                    <input type="radio" name="question" value="${i}" ${checkedAttr} ${isRevealed ? 'disabled' : ''}>
+                    <span class="letter-circle">${letters[i]}</span>
+                    <span style="flex:1;">${optText}</span>
+                    ${iconHtml}
+                  </label>
+                </div>
+              `;
+                });
+                optionsContainer.innerHTML = html;
+
+                // Feedback area
+                if (isRevealed && selectedIdx !== null) {
+                    const explanation = generateExplanation(q, selectedIdx);
+                    feedbackArea.className = 'feedback-area visible ' + (explanation.isCorrect ? 'correct-fb' :
+                        'incorrect-fb');
+                    feedbackIcon.textContent = explanation.isCorrect ? '✅' : '❌';
+                    feedbackTitle.textContent = explanation.title;
+                    feedbackDetail.textContent = explanation.detail;
+                    feedbackCorrectAnswer.style.display = 'none';
+                    if (!explanation.isCorrect) {
+                        feedbackCorrectAnswer.style.display = 'inline-block';
+                        feedbackCorrectAnswer.textContent = 'Correct: ' + letters[q.correct] + '. ' + q.opts[q.correct];
+                    }
+                } else {
+                    feedbackArea.className = 'feedback-area';
+                    feedbackArea.style.display = 'none';
+                }
+
+                // Attach click listeners
+                if (!isRevealed) {
+                    document.querySelectorAll('.opt').forEach(optEl => {
+                        optEl.addEventListener('click', function(e) {
+                            const radio = this.querySelector('input[type="radio"]');
+                            if (radio && !radio.disabled) {
+                                radio.checked = true;
+                                const val = parseInt(radio.value);
+                                if (!isNaN(val)) {
+                                    handleAnswerSelection(currentIndex, val);
+                                }
+                            }
+                        });
+                    });
+                }
+
+                // Update buttons
+                prevBtn.disabled = (index === 0);
+                if (index === totalQ - 1) {
+                    nextBtn.textContent = 'Finish ▶';
+                    nextBtn.className = 'primary-btn';
+                } else {
+                    nextBtn.textContent = 'Next ▶';
+                    nextBtn.className = 'primary-btn';
+                }
+                const sel = userAnswers[index];
+                infoMsg.textContent = isRevealed ? (sel === q.correct ? '✅ Correct answer' : '❌ Incorrect answer') :
+                    (sel !== null ? '✓ Option selected (click to confirm)' : 'Select an option');
+                updateStatsUI();
+            }
+
+            // ── Handle answer selection with immediate feedback ──
+            function handleAnswerSelection(index, selectedValue) {
+                if (revealed[index]) return; // Already revealed
+                userAnswers[index] = selectedValue;
+                revealed[index] = true; // Immediately reveal
+                const q = QUESTIONS[index];
+                const isCorrect = selectedValue === q.correct;
+
+                // Flash animation
+                qContainer.classList.remove('correct-flash', 'incorrect-flash');
+                void qContainer.offsetWidth; // Trigger reflow
+                if (isCorrect) {
+                    qContainer.classList.add('correct-flash');
+                } else {
+                    qContainer.classList.add('incorrect-flash');
+                }
+
+                // Re-render to show feedback
+                renderQuestion(index);
+                updateStatsUI();
+
+                // Scroll to feedback
+                feedbackArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            // ── Navigation ──
+            function goTo(index) {
+                if (index < 0) index = 0;
+                if (index >= totalQ) index = totalQ - 1;
+                currentIndex = index;
+                renderQuestion(currentIndex);
+                qContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                feedbackArea.style.display = 'none';
+                feedbackArea.className = 'feedback-area';
+            }
+
+            function finishQuiz() {
+                const stats = computeStats();
+                const unanswered = stats.remaining;
+                if (unanswered > 0) {
+                    if (!confirm(
+                            'You have ' + unanswered +
+                            ' unanswered question(s). Unanswered questions count as incorrect. Finish anyway?')) {
+                        return;
+                    }
+                }
+                // Reveal any remaining unanswered
+                for (let i = 0; i < totalQ; i++) {
+                    if (!revealed[i]) revealed[i] = true;
+                }
+                const finalStats = computeStats();
+                const pct = Math.round((finalStats.correct / totalQ) * 100);
+                quizArea.classList.add('hidden');
+                resultsArea.classList.remove('hidden');
+                document.getElementById('finalScoreNum').textContent = finalStats.correct;
+                document.getElementById('finalPctLabel').textContent = pct + '%';
+                document.getElementById('finalCorrect').textContent = finalStats.correct;
+                document.getElementById('finalIncorrect').textContent = finalStats.incorrect;
+                document.getElementById('finalUnanswered').textContent = finalStats.remaining;
+                const scoreRing = document.getElementById('scoreRing');
+                scoreRing.style.setProperty('--score-pct', pct);
+                resultsArea.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            function restartQuiz() {
+                for (let i = 0; i < totalQ; i++) {
+                    userAnswers[i] = null;
+                    revealed[i] = false;
+                }
+                currentIndex = 0;
+                resultsArea.classList.add('hidden');
+                quizArea.classList.remove('hidden');
+                feedbackArea.className = 'feedback-area';
+                feedbackArea.style.display = 'none';
+                qContainer.classList.remove('correct-flash', 'incorrect-flash');
+                renderQuestion(0);
+                updateStatsUI();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // ── Event listeners ──
+            prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+            nextBtn.addEventListener('click', () => {
+                if (currentIndex === totalQ - 1) {
+                    finishQuiz();
+                } else {
+                    goTo(currentIndex + 1);
+                }
+            });
+            finishBtn.addEventListener('click', () => finishQuiz());
+            restartBtn.addEventListener('click', restartQuiz);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (resultsArea.classList.contains('hidden')) {
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        if (currentIndex < totalQ - 1) goTo(currentIndex + 1);
+                        else if (currentIndex === totalQ - 1) finishQuiz();
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if (currentIndex > 0) goTo(currentIndex - 1);
+                    } else if (e.key === 'Enter' && !revealed[currentIndex] && userAnswers[currentIndex] !== null) {
+                        e.preventDefault();
+                        handleAnswerSelection(currentIndex, userAnswers[currentIndex]);
+                    }
+                }
+            });
+
+            // Touch swipe support
+            let touchStartX = 0;
+            let touchStartY = 0;
+            qContainer.addEventListener('touchstart', function(e) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+            qContainer.addEventListener('touchend', function(e) {
+                const dx = e.changedTouches[0].clientX - touchStartX;
+                const dy = e.changedTouches[0].clientY - touchStartY;
+                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+                    if (dx < -40 && currentIndex < totalQ - 1) {
+                        goTo(currentIndex + 1);
+                    } else if (dx > 40 && currentIndex > 0) {
+                        goTo(currentIndex - 1);
+                    }
+                }
+            });
+
+            // ── Init ──
+            renderQuestion(0);
+            updateStatsUI();
+        })();
+    </script>
+</body>
+</html>
