@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Cybersecurity Quiz · 160 Q</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f4f7fc;
+            padding: 16px 12px 40px;
+            color: #1a2634;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #0b2b44;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+        .subhead {
+            font-size: 0.95rem;
+            color: #2c4a6e;
+            margin-bottom: 20px;
+            border-left: 4px solid #2a7de1;
+            padding-left: 14px;
+            background: #e9eff7;
+            border-radius: 0 12px 12px 0;
+            line-height: 1.4;
+        }
+        .progress-badge {
+            background: #1d3b5c;
+            color: white;
+            border-radius: 40px;
+            padding: 6px 18px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 18px;
+        }
+        .question-card {
+            background: white;
+            border-radius: 28px;
+            padding: 24px 20px;
+            box-shadow: 0 8px 24px rgba(0,20,40,0.06);
+            margin-bottom: 24px;
+            border: 1px solid #dde5ef;
+        }
+        .q-number {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #2a7de1;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .q-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .opt {
+            background: #f1f5fa;
+            border-radius: 16px;
+            padding: 14px 18px;
+            border: 1.5px solid transparent;
+            transition: 0.1s ease;
+            font-size: 1rem;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        .opt.selected {
+            background: #d2e3ff;
+            border-color: #2a7de1;
+            box-shadow: 0 0 0 2px rgba(42,125,225,0.15);
+        }
+        .opt.correct-reveal {
+            background: #c8f0d9;
+            border-color: #1b8c4a;
+        }
+        .opt.wrong-reveal {
+            background: #ffe1de;
+            border-color: #c13a3a;
+        }
+        .opt.disabled {
+            opacity: 0.8;
+        }
+        .opt input[type="radio"] {
+            display: none;
+        }
+        .opt label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .opt input[type="radio"]:checked + span {
+            font-weight: 500;
+        }
+        .letter {
+            display: inline-block;
+            min-width: 24px;
+            font-weight: 600;
+            color: #2a4a6a;
+        }
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 8px 0 28px;
+        }
+        button {
+            background: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            background: #1d3b5c;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            flex: 1 1 auto;
+            min-width: 110px;
+            transition: 0.15s;
+            touch-action: manipulation;
+            border: 1px solid #2d4b6e;
+        }
+        button:active {
+            transform: scale(0.96);
+            background: #0f2a44;
+        }
+        button.secondary {
+            background: #e4ecf5;
+            color: #1d3b5c;
+            border-color: #bccfdf;
+        }
+        button:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .results-box {
+            background: white;
+            border-radius: 32px;
+            padding: 28px 22px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            border: 1px solid #dde5ef;
+        }
+        .results-box h2 {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+        .score {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: #0b2b44;
+            letter-spacing: -1px;
+        }
+        .footnote {
+            margin-top: 24px;
+            color: #4d627c;
+            font-size: 0.9rem;
+            border-top: 1px solid #dde5ef;
+            padding-top: 20px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .mt-2 { margin-top: 12px; }
+        .flex { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag {
+            background: #dce6f2;
+            padding: 2px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #1d3b5c;
+            letter-spacing: 0.3px;
+        }
+        .marker {
+            display: inline-block;
+            background: #2a7de1;
+            color: white;
+            border-radius: 40px;
+            padding: 0 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        @media (max-width: 480px) {
+            .question-card { padding: 20px 14px; }
+            .q-text { font-size: 1rem; }
+            .opt { padding: 12px 14px; }
+            button { padding: 14px 18px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <header>
+        <h1>🛡️ CyberQuiz</h1>
+        <div class="subhead">160 questions · ARPANET · APT · risk · social engineering & more</div>
+    </header>
+
+    <div id="quizArea">
+        <div class="progress-badge" id="progressBadge">1 / 160</div>
+
+        <div id="questionContainer" class="question-card">
+            <div class="q-number" id="qNumber">Q1</div>
+            <div class="q-text" id="qText">Loading question...</div>
+            <div class="options" id="optionsContainer"></div>
+        </div>
+
+        <div class="action-bar">
+            <button id="prevBtn" class="secondary">◀ Prev</button>
+            <button id="nextBtn">Next ▶</button>
+            <button id="submitBtn" class="secondary" style="flex:0 1 auto;">✓ Submit</button>
+        </div>
+        <div id="infoMessage" style="font-size:0.9rem; color:#3f5a7a; padding: 0 4px;"></div>
+    </div>
+
+    <div id="resultsArea" class="results-box hidden">
+        <h2>🏁 Quiz complete</h2>
+        <div class="score" id="finalScore">0</div>
+        <div style="font-size:1.1rem; margin-top: 4px;">correct out of 160</div>
+        <div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+            <span class="tag">✅ correct</span>
+            <span class="tag">❌ incorrect</span>
+            <span class="tag">⏳ unanswered</span>
+        </div>
+        <button id="restartBtn" style="margin-top: 28px; background: #0b2b44;">↻ Restart quiz</button>
+        <div class="footnote">All questions from the provided bank · 160 items</div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // --------------------------------------------------------------
+        // FULL question bank – extracted from the PDF (160 items)
+        // each: { id, question, options: [A,B,C,D], correct: 0..3 }
+        // --------------------------------------------------------------
+        const QUESTIONS = [
+            // 1
+            { q: "Which of the following best explains why security was not a primary architectural consideration during the development of ARPANET in the 1970s?", opts: ["The technology was too primitive to support security mechanisms", "The initial focus was on connectivity and functionality rather than security", "There were no known threats at the time", "Security standards were already well-established and considered unnecessary"], correct: 1 },
+            // 2
+            { q: "How does a Zero-Day Exploit differ fundamentally from other types of malware or exploits?", opts: ["It targets only government systems", "It exploits a previously unknown vulnerability with no available patch", "It relies on social engineering tactics to gain access", "It is a type of ransomware demanding payment to decrypt files"], correct: 1 },
+            // 3
+            { q: "What distinguishes a Malicious Insider from a Negligent Insider in terms of cybersecurity threats?", opts: ["Malicious Insiders use zero-day exploits, while Negligent Insiders use phishing", "Malicious Insiders intentionally exploit access for gain, whereas Negligent Insiders compromise security inadvertently", "Malicious Insiders only target physical assets, Negligent Insiders target digital assets", "Malicious Insiders have limited access, Negligent Insiders have high access privileges"], correct: 1 },
+            // 4
+            { q: "According to the risk management concepts covered, which factor most directly influences the likelihood of a threat exploiting a vulnerability?", opts: ["The asset's monetary value", "The effectiveness of existing security controls and prevalence of the threat", "The total number of vulnerabilities", "The organization's cybersecurity budget"], correct: 1 },
+            // 5
+            { q: "Considering the characteristics of Nation-State Sponsored Actors, which combination of tactics and motivations is most accurate?", opts: ["Financial gain; phishing and ransomware campaigns", "Political/social cause; DDoS and website defacement", "Espionage and sabotage; zero-day exploits and Advanced Persistent Threats", "Revenge and negligence; data exfiltration and misconfiguration"], correct: 2 },
+            // 6
+            { q: "Which of the following best explains why security was not a primary architectural consideration during the development of ARPANET in the 1970s?", opts: ["The technology for secure communications was not yet invented.", "The focus was primarily on achieving connectivity and functionality over security.", "There was a universal trust among early network users, eliminating the need for security.", "Security protocols were in place but not enforced by government regulations."], correct: 1 },
+            // 7
+            { q: "How do Advanced Persistent Threats (APTs) fundamentally differ from typical malware attacks in the modern cyber threat landscape?", opts: ["APTs rely solely on phishing techniques, whereas typical malware uses exploits.", "APTs are short-term, high-impact attacks, unlike typical malware that remains stealthy.", "APTs involve prolonged, stealthy intrusion aiming at strategic goals, evading detection over time.", "APTs exclusively target personal devices, while typical malware targets enterprise systems."], correct: 2 },
+            // 8
+            { q: "Considering the definitions provided, which scenario best illustrates the difference between a vulnerability and a threat in cybersecurity?", opts: ["A software bug that allows unauthorized access is a threat, and hackers exploiting it are vulnerabilities.", "A hacker attempting to breach a system is a vulnerability, and the unpatched software is the threat.", "A software bug is a vulnerability; a hacker attempting to exploit it is a threat.", "There is no difference; the terms are interchangeable."], correct: 2 },
+            // 9
+            { q: "In the context of threat actors, why are insiders considered particularly dangerous despite having varied motivations such as negligence or revenge?", opts: ["Because they often use zero-day exploits unknown to the organization.", "Because their high level of authorized access enables direct data exfiltration or sabotage.", "Because they typically have government backing and advanced resources.", "Because they primarily use DDoS attacks and website defacement."], correct: 1 },
+            // 10
+            { q: "When conducting a cybersecurity risk assessment, which factor most directly influences the calculation of risk as 'Likelihood x Impact'?", opts: ["The number of employees in the organization.", "The frequency with which a threat can exploit a vulnerability and the severity of resulting damage.", "The total number of vulnerabilities present in the system, regardless of exploitability.", "The budget allocated to cybersecurity controls without considering threat prevalence."], correct: 1 },
+            // 11
+            { q: "Which statement best explains why early ARPANET development did not prioritize security in its architecture?", opts: ["Security technologies were not yet invented in the 1970s.", "The focus was primarily on connectivity and robustness rather than security.", "The network was intended only for trusted government users, so security was deemed unnecessary.", "Early computing systems had no vulnerabilities to exploit."], correct: 1 },
+            // 12
+            { q: "How do Advanced Persistent Threats (APTs) differ from typical malware attacks in their operational characteristics?", opts: ["APTs rely solely on phishing, while typical malware uses exploits.", "APTs are short-term attacks aimed at immediate disruption.", "APTs involve prolonged, stealthy intrusion with strategic objectives, often leveraging zero-day exploits.", "Typical malware always requires user interaction, whereas APTs do not."], correct: 2 },
+            // 13
+            { q: "Considering the table of threat actor characteristics, which combination of motivation and tactics is most accurately associated with hacktivists?", opts: ["Financial gain; ransomware and phishing campaigns.", "Political/social causes; DDoS attacks, website defacement, and doxing.", "Espionage; zero-day exploits and APTs.", "Revenge; data exfiltration and sabotage."], correct: 1 },
+            // 14
+            { q: "In the context of risk management, why is it critical to understand both likelihood and impact when assessing cybersecurity risk?", opts: ["Because likelihood alone determines how often an incident will occur.", "Because impact alone dictates how much damage a threat can cause regardless of occurrence.", "Because risk is a function of both the probability that a threat exploits a vulnerability and the severity of resulting harm, guiding prioritization.", "Because understanding impact allows organizations to ignore low-likelihood threats."], correct: 2 },
+            // 15
+            { q: "Which of the following scenarios best exemplifies the use of social engineering as a common attack vector described in the content?", opts: ["Exploiting a zero-day vulnerability in an operating system to execute code remotely.", "Sending a spear phishing email to a CFO impersonating a trusted vendor to obtain confidential financial data.", "Deploying ransomware that encrypts files and demands payment.", "Using a brute-force attack to guess passwords."], correct: 1 },
+            // 16
+            { q: "Which characteristic most distinctly separates a worm from a virus in malware taxonomy?", opts: ["Ability to encrypt files and demand ransom", "Self-replication and attachment to legitimate programs", "Independent spreading across networks without user action", "Disguised as legitimate software to trick the user"], correct: 2 },
+            // 17
+            { q: "In the context of nation-state sponsored cyber actors, what is the primary reason zero-day exploits are frequently employed?", opts: ["To maximize financial gain through ransomware", "Because they are publicly known and easy to patch", "To maintain prolonged stealth and strategic advantage", "To perform website defacement and promote political causes"], correct: 2 },
+            // 18
+            { q: "Considering the definitions from the foundational terminology, which scenario best exemplifies a vulnerability?", opts: ["A firewall rule that blocks all incoming traffic", "A software bug that allows unauthorized privilege escalation", "The chance that a ransomware attack will damage operations", "The sum of all network entry points accessible to outsiders"], correct: 1 },
+            // 19
+            { q: "How does the concept of risk integrate both likelihood and impact in cybersecurity risk management?", opts: ["Risk is the sum of all vulnerabilities multiplied by the number of assets", "Risk equals the potential damage multiplied by the ease of exploit", "Risk is the probability of a threat exploiting a vulnerability times the severity of consequences", "Risk is the total number of threats detected over a period"], correct: 2 },
+            // 20
+            { q: "Which of the following threat actor types relies primarily on psychological manipulation rather than technical vulnerabilities, and what is their most common attack vector?", opts: ["Nation-state; zero-day exploits", "Hacktivists; DDoS", "Cybercriminals; ransomware", "Social engineers; phishing and pretexting"], correct: 3 },
+            // 21
+            { q: "Which of the following best explains why security was not a primary architectural consideration in the design of ARPANET during the 1970s?", opts: ["The network was designed primarily for commercial transactions requiring high confidentiality.", "Early computing focused on data integrity and availability rather than external threat mitigation.", "ARPANET was built with advanced encryption protocols from inception.", "The developers prioritized defense against zero-day exploits and ransomware."], correct: 1 },
+            // 22
+            { q: "How does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?", opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.", "They involve short-lived, opportunistic attacks with minimal stealth.", "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.", "They exclusively target individual users through malware like adware and spyware."], correct: 2 },
+            // 23
+            { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?", opts: ["Financial gain; ransomware and phishing campaigns.", "Political activism; DDoS attacks and website defacement.", "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.", "Negligence; accidental data leaks and misconfigurations."], correct: 2 },
+            // 24
+            { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?", opts: ["A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.", "Risk is the potential damage when a threat exploits a vulnerability.", "Threats are assets that require protection from vulnerabilities.", "Vulnerabilities are defense mechanisms that reduce risk from threats."], correct: 1 },
+            // 25
+            { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?", opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+            // 26
+            { q: "Which of the following best explains why cybersecurity was not a primary architectural consideration during the development of the ARPANET in the 1970s?", opts: ["The technology for encryption and authentication did not exist at the time.", "The focus was on establishing connectivity and functionality rather than securing the network.", "Early computing systems were inherently secure due to isolation.", "Cyber threats did not emerge until the 1980s with the rise of personal computers."], correct: 1 },
+            // 27
+            { q: "In the context of cybersecurity, how does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?", opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.", "They involve short-lived, opportunistic attacks with minimal stealth.", "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.", "They exclusively target individual users through malware like adware and spyware."], correct: 2 },
+            // 28
+            { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?", opts: ["Financial gain; ransomware and phishing campaigns.", "Political activism; DDoS attacks and website defacement.", "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.", "Negligence; accidental data leaks and misconfigurations."], correct: 2 },
+            // 29
+            { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?", opts: ["A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.", "Risk is the potential damage when a threat exploits a vulnerability.", "Threats are assets that require protection from vulnerabilities.", "Vulnerabilities are defense mechanisms that reduce risk from threats."], correct: 1 },
+            // 30
+            { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?", opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+            // 31
+            { q: "Which of the following best explains why security was not a primary architectural consideration in the design of ARPANET during the 1970s?", opts: ["The network was designed primarily for commercial transactions requiring high confidentiality.", "Early computing focused on data integrity and availability rather than external threat mitigation.", "ARPANET was built with advanced encryption protocols from inception.", "The developers prioritized defense against zero-day exploits and ransomware."], correct: 1 },
+            // 32
+            { q: "How does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?", opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.", "They involve short-lived, opportunistic attacks with minimal stealth.", "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.", "They exclusively target individual users through malware like adware and spyware."], correct: 2 },
+            // 33
+            { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?", opts: ["Financial gain; ransomware and phishing campaigns.", "Political activism; DDoS attacks and website defacement.", "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.", "Negligence; accidental data leaks and misconfigurations."], correct: 2 },
+            // 34
+            { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?", opts: ["A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.", "Risk is the potential damage when a threat exploits a vulnerability.", "Threats are assets that require protection from vulnerabilities.", "Vulnerabilities are defense mechanisms that reduce risk from threats."], correct: 1 },
+            // 35
+            { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?", opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+            // 36
+            { q: "Which of the following best explains why cybersecurity was not a primary architectural consideration during the development of the ARPANET in the 1970s?", opts: ["The technology for encryption and authentication did not exist at the time.", "The focus was on establishing connectivity and functionality rather than securing the network.", "Early computing systems were inherently secure due to isolation.", "Cyber threats did not emerge until the 1980s with the rise of personal computers."], correct: 1 },
+            // 37
+            { q: "In the context of cybersecurity, how does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?", opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.", "They involve short-lived, opportunistic attacks with minimal stealth.", "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.", "They exclusively target individual users through malware like adware and spyware."], correct: 2 },
+            // 38
+            { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?", opts: ["Financial gain; ransomware and phishing campaigns.", "Political activism; DDoS attacks and website defacement.", "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.", "Negligence; accidental data leaks and misconfigurations."], correct: 2 },
+            // 39
+            { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?", opts: ["A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.", "Risk is the potential damage when a threat exploits a vulnerability.", "Threats are assets that require protection from vulnerabilities.", "Vulnerabilities are defense mechanisms that reduce risk from threats."], correct: 1 },
+            // 40
+            { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?", opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+            // 41
+            { q: "Which of the following best explains why security was not a primary architectural consideration in the design of ARPANET during the 1970s?", opts: ["The network was designed primarily for commercial transactions requiring high confidentiality.", "Early computing focused on data integrity and availability rather than external threat mitigation.", "ARPANET was built with advanced encryption protocols from inception.", "The developers prioritized defense against zero-day exploits and ransomware."], correct: 1 },
+            // 42
+            { q: "How does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?", opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.", "They involve short-lived, opportunistic attacks with minimal stealth.", "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.", "They exclusively target individual users through malware like adware and spyware."], correct: 2 },
+            // 43
+            { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?", opts: ["Financial gain; ransomware and phishing campaigns.", "Political activism; DDoS attacks and website defacement.", "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.", "Negligence; accidental data leaks and misconfigurations."], correct: 2 },
+            // 44
+            { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?", opts: ["A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.", "Risk is the potential damage when a threat exploits a vulnerability.", "Threats are assets that require protection from vulnerabilities.", "Vulnerabilities are defense mechanisms that reduce risk from threats."], correct: 1 },
+            // 45
+            { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?", opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+            // 46
+            { q: "Which of the following best explains why security was not a primary architectural consideration during the development of the ARPANET in the 1970s?", opts: ["The technology for encryption and authentication did not exist at the time.", "The focus was on establishing connectivity and functionality rather than securing the network.", "Early computing systems were inherently secure due to isolation.", "Cyber threats did not emerge until the 1980s with the rise of personal computers."], correct: 1 },
+            // 47
+            { q: "In the context of cybersecurity, how does an Advanced Persistent Threat (APT) distinguish itself from other cyberattacks in terms of operational characteristics?", opts: ["APTs rely mainly on social engineering techniques like phishing and baiting.", "They involve short-lived, opportunistic attacks with minimal stealth.", "APTs are prolonged, highly sophisticated campaigns designed to remain undetected for long periods.", "They exclusively target individual users through malware like adware and spyware."], correct: 2 },
+            // 48
+            { q: "Considering the threat actor types, which combination of motivation and tactics uniquely identifies nation-state sponsored attackers?", opts: ["Financial gain; ransomware and phishing campaigns.", "Political activism; DDoS attacks and website defacement.", "Strategic geopolitical goals; use of zero-day exploits and APT campaigns.", "Negligence; accidental data leaks and misconfigurations."], correct: 2 },
+            // 49
+            { q: "In the context of cybersecurity risk management, which statement best describes the relationship between vulnerability, threat, and risk?", opts: ["A vulnerability is the likelihood of a threat occurring, and risk is the weakness exploited.", "Risk is the potential damage when a threat exploits a vulnerability.", "Threats are assets that require protection from vulnerabilities.", "Vulnerabilities are defense mechanisms that reduce risk from threats."], correct: 1 },
+            // 50
+            { q: "Which social engineering technique involves creating a fabricated scenario to manipulate a target into revealing sensitive information?", opts: ["Whaling", "Pretexting", "Baiting", "Spear phishing"], correct: 1 },
+            // 51
+            { q: "Which early computing era development marked a significant shift from physical to logical security focusing on authentication mechanisms?", opts: ["1970s ARPANET implementation", "1960s time-sharing systems", "1988 Morris Worm incident", "Late 1960s RAND Corporation research"], correct: 1 },
+            // 52
+            { q: "What was a primary reason that security was not initially a central architectural consideration in the design of ARPANET in the 1970s?", opts: ["The network was only intended for military use", "The threat landscape was not yet well understood", "Hardware limitations prevented security implementations", "Developers prioritized speed and connectivity over security"], correct: 3 },
+            // 53
+            { q: "How do Advanced Persistent Threats (APTs) differ from typical malware attacks in terms of attacker objectives and behavior?", opts: ["APTs focus on rapid financial theft using ransomware", "APTs are short-lived and noisy attacks designed for immediate impact", "APTs are sophisticated, stealthy, and aim for prolonged undetected access", "APTs exploit only publicly known vulnerabilities"], correct: 2 },
+            // 54
+            { q: "According to the content, which of the following best describes the relationship between cyber risk and vulnerabilities?", opts: ["Vulnerabilities are the external threats that exploit systems", "Risk arises when a threat exploits a vulnerability causing potential loss", "Risk is the vulnerability itself regardless of threat presence", "Vulnerabilities increase only when no attacks have been detected"], correct: 1 },
+            // 55
+            { q: "Among the malware types listed, which one is characterized by independent self-replication and spreading across networks without attaching to other programs?", opts: ["Trojan Horse", "Virus", "Worm", "Ransomware"], correct: 2 },
+            // 56
+            { q: "Which threat actor group is most likely to use zero-day exploits and advanced persistent threats to achieve strategic national objectives?", opts: ["Cybercriminals", "Hacktivists", "Nation-state sponsored", "Insider threat"], correct: 2 },
+            // 57
+            { q: "What is the primary difference between malicious insiders and negligent insiders as defined in the threat actor taxonomy?", opts: ["Malicious insiders use hacking tools, negligent insiders do not", "Malicious insiders have external motivations, negligent insiders internal", "Malicious insiders intentionally exploit access, negligent insiders cause harm unintentionally", "Malicious insiders target financial gain, negligent insiders target sabotage"], correct: 2 },
+            // 58
+            { q: "Which social engineering technique uniquely targets high-profile executives with tailored phishing attacks?", opts: ["Whaling", "Baiting", "Spear phishing", "Pretexting"], correct: 0 },
+            // 59
+            { q: "How is 'risk' quantitatively conceptualized in cybersecurity risk management as per the content?", opts: ["Risk equals the sum of all threats and vulnerabilities", "Risk equals the product of likelihood and impact of an adverse event", "Risk is the inverse of system availability and integrity", "Risk is measured solely by the financial cost of incidents"], correct: 1 },
+            // 60
+            { q: "In risk management, what factor primarily influences the 'likelihood' component when assessing the risk posed by a threat exploiting a vulnerability?", opts: ["The asset's criticality", "The effectiveness of existing controls and threat prevalence", "The cost of recovery", "The number of users"], correct: 1 },
+            // 61
+            { q: "Which of the following best explains why security was not a primary architectural consideration during the development of the ARPANET in the 1970s?", opts: ["The technology was too primitive to support security features", "The focus was on connectivity and networking functionality over security", "Security was considered unnecessary because users were trusted", "Encryption algorithms were not yet invented"], correct: 1 },
+            // 62
+            { q: "The 1988 Morris Worm is considered a landmark event in cybersecurity because it was:", opts: ["The first known ransomware attack targeting financial institutions", "A self-replicating malicious code that exposed vulnerabilities in networked systems", "The first use of zero-day exploits by nation-state actors", "An insider attack causing widespread data theft"], correct: 1 },
+            // 63
+            { q: "How do Advanced Persistent Threats (APTs) differ fundamentally from typical cybercriminal attacks?", opts: ["APTs rely solely on phishing while cybercriminals use malware", "APTs are short-term, opportunistic intrusions with limited goals", "APTs involve sophisticated, prolonged, and stealthy operations often linked to nation-states", "Cybercriminals always use zero-day exploits, whereas APTs do not"], correct: 2 },
+            // 64
+            { q: "In the context of cybersecurity, what distinguishes a vulnerability from a threat?", opts: ["A vulnerability is a potential attacker, whereas a threat is a software tool", "A vulnerability is a weakness in a system, while a threat is a potential danger exploiting that weakness", "Vulnerability refers to external dangers, threat refers to internal dangers", "They are the same concept"], correct: 1 },
+            // 65
+            { q: "Which malware type is characterized by self-replication and the ability to spread independently across networks without attaching to other programs?", opts: ["Virus", "Trojan Horse", "Worm", "Ransomware"], correct: 2 },
+            // 66
+            { q: "Among social engineering tactics, which specifically targets high-profile executives and uses personalized information to deceive?", opts: ["Spear phishing", "Whaling", "Baiting", "Pretexting"], correct: 1 },
+            // 67
+            { q: "Nation-state sponsored threat actors are most likely to employ which of the following tactics?", opts: ["Distributed Denial of Service attacks and website defacement", "Ransomware campaigns targeting random victims for financial gain", "Advanced Persistent Threats and zero-day exploits to achieve strategic espionage goals", "Negligent insider actions due to misconfiguration and errors"], correct: 2 },
+            // 68
+            { q: "According to the risk formula presented, which factor directly affects the likelihood component in cybersecurity risk management?", opts: ["The financial impact of a data breach", "The severity of legal consequences after an attack", "The prevalence of the threat and effectiveness of existing security controls", "The asset's inherent value regardless of threats"], correct: 2 },
+            // 69
+            { q: "Which statement correctly differentiates authentication from authorization in cybersecurity?", opts: ["Authentication verifies user identity; authorization determines access privileges after authentication", "Authentication only applies to biometric methods; authorization applies to passwords", "Authorization verifies identity; authentication assigns permissions", "Both terms refer to the same security process and are interchangeable"], correct: 0 },
+            // 70
+            { q: "The economic impact of cyberattacks includes all EXCEPT which of the following?", opts: ["Theft of intellectual property and financial assets", "Ransomware payments and fraud losses", "Legal liabilities and damage to brand reputation", "Guaranteed recovery of all lost data without cost"], correct: 3 },
+            // 71
+            { q: "Which statement best explains why security was not a primary architectural consideration during the development of ARPANET in the 1970s?", opts: ["The technology was too primitive to implement security measures", "The network was designed primarily for trusted academic and military users", "Security protocols had not yet been invented", "The focus was on commercial applications rather than research networks"], correct: 1 },
+            // 72
+            { q: "In the context of the 1988 Morris Worm incident, what made this event a landmark in cybersecurity history?", opts: ["It was the first known use of ransomware attacks", "It was a self-replicating malicious code that caused widespread disruption", "It exploited a zero-day vulnerability in cloud infrastructure", "It was the first cyber espionage attack sponsored by a nation-state"], correct: 1 },
+            // 73
+            { q: "Which of the following best characterizes Advanced Persistent Threats (APTs) as described in the modern cybersecurity era?", opts: ["Brief, opportunistic attacks focused on financial gain", "Sophisticated, prolonged attacks designed to remain undetected", "Malware that spreads automatically without user interaction", "Attacks that only target mobile devices"], correct: 1 },
+            // 74
+            { q: "Considering the economic impact of cyberattacks, why does the World Economic Forum rank them among the top global risks?", opts: ["Because they primarily affect only financial institutions", "Due to their potential to cause theft, fraud, reputational damage, and legal liabilities across sectors", "Because cyberattacks rarely cause tangible harm and are mostly theoretical risks", "Since cyberattacks are limited to personal devices and have minimal societal impact"], correct: 1 },
+            // 75
+            { q: "Which of the following correctly differentiates between a worm and a virus in terms of propagation?", opts: ["Worms require user intervention to replicate, viruses spread independently", "Viruses self-replicate and spread independently, worms attach to legitimate programs", "Worms self-replicate and spread independently across networks, viruses attach to legitimate programs", "Viruses encrypt files for ransom, worms are designed for espionage"], correct: 2 },
+            // 76
+            { q: "Which threat actor type is most likely to utilize zero-day exploits and conduct espionage with strategic, long-term goals?", opts: ["Hacktivists", "Cybercriminals", "Nation-State Sponsored Actors", "Malicious Insiders"], correct: 2 },
+            // 77
+            { q: "How do negligent insiders commonly compromise organizational security, according to the threat actor classifications?", opts: ["By deliberately stealing sensitive data for personal gain", "Through inadvertent actions such as falling for phishing attacks or misconfiguration", "By launching sophisticated zero-day exploits", "By performing DDoS attacks"], correct: 1 },
+            // 78
+            { q: "What distinguishes spear phishing from general phishing in social engineering attack vectors?", opts: ["Spear phishing targets random users, phishing targets specific individuals", "Spear phishing uses malware, phishing only uses email scams", "Spear phishing targets specific individuals with tailored content, phishing is broadly targeted", "Spear phishing is a physical attack vector, phishing is digital only"], correct: 2 },
+            // 79
+            { q: "In the risk management equation Risk = Likelihood x Impact, which factor is influenced by the effectiveness of controls and prevalence of threats?", opts: ["Impact", "Likelihood", "Asset Value", "Vulnerability"], correct: 1 },
+            // 80
+            { q: "Within the context of cybersecurity fundamentals, which term best describes a software, data, or command sequence that takes advantage of a bug or vulnerability?", opts: ["Threat", "Risk", "Exploit", "Firewall"], correct: 2 },
+            // 81 True/False (converted)
+            { q: "The primary architectural design of the ARPANET in the 1970s prioritized security as its main focus.", opts: ["True", "False"], correct: 1 },
+            { q: "Advanced Persistent Threats (APTs) are characterized by their prolonged, stealthy presence within targeted systems, often utilizing zero-day exploits.", opts: ["True", "False"], correct: 0 },
+            { q: "Nation-state sponsored threat actors typically have low resources and use simple tactics such as phishing and ransomware.", opts: ["True", "False"], correct: 1 },
+            { q: "Social engineering attacks exploit technical vulnerabilities in software systems rather than human psychology.", opts: ["True", "False"], correct: 1 },
+            { q: "Ransomware operates by encrypting victim files and demanding a ransom for their release, representing a distinct malware category.", opts: ["True", "False"], correct: 0 },
+            { q: "Insiders who inadvertently cause security breaches through negligence primarily pose threats due to their malicious intent.", opts: ["True", "False"], correct: 1 },
+            { q: "The risk in cybersecurity can be quantified as the product of the likelihood of a threat exploiting a vulnerability and the impact of that exploitation.", opts: ["True", "False"], correct: 0 },
+            { q: "Authentication and authorization serve the same function of verifying a user's identity in cybersecurity processes.", opts: ["True", "False"], correct: 1 },
+            { q: "Pretexting involves creating a fabricated scenario to deceive individuals into divulging confidential information.", opts: ["True", "False"], correct: 0 },
+            { q: "The expansion of personal computers and commercialization of the internet in the 1980s and 1990s led to a reduced attack surface for cyber threats.", opts: ["True", "False"], correct: 1 },
+            { q: "The Morris Worm of 1988 was the first instance of self-replicating malicious code that brought widespread attention to cybersecurity vulnerabilities.", opts: ["True", "False"], correct: 0 },
+            { q: "Advanced Persistent Threats (APTs) typically involve short, high-intensity attacks that are quickly detected and mitigated.", opts: ["True", "False"], correct: 1 },
+            { q: "According to the content, social engineering primarily exploits technical software vulnerabilities rather than human psychology.", opts: ["True", "False"], correct: 1 },
+            { q: "Nation-state sponsored threat actors are characterized by high resources and often use zero-day exploits and APT tactics to achieve strategic objectives.", opts: ["True", "False"], correct: 0 },
+            { q: "Ransomware encrypts files on a victim's system and typically demands payment in exchange for the decryption key.", opts: ["True", "False"], correct: 0 },
+            { q: "Negligent insiders intentionally compromise security to gain personal benefits, whereas malicious insiders unknowingly cause security breaches.", opts: ["True", "False"], correct: 1 },
+            { q: "The attack surface is defined as the total number of vulnerabilities present in a system's software code.", opts: ["True", "False"], correct: 1 },
+            { q: "Whaling attacks are a form of spear phishing that specifically targets high-profile executives within an organization.", opts: ["True", "False"], correct: 0 },
+            { q: "Business Impact Analysis (BIA) focuses on assessing the likelihood that a threat will exploit a vulnerability rather than the severity of the impact.", opts: ["True", "False"], correct: 1 },
+            { q: "Cybercriminals rely primarily on politically motivated tactics such as DDoS and website defacement to achieve their goals.", opts: ["True", "False"], correct: 1 },
+            { q: "The Morris Worm of 1988 was the first example of a self-replicating malicious code that highlighted the vulnerabilities of networked systems.", opts: ["True", "False"], correct: 0 },
+            { q: "The development of ARPANET in the 1970s prioritized security as a core architectural feature from its inception.", opts: ["True", "False"], correct: 1 },
+            { q: "Advanced Persistent Threats (APTs) are characterized by their ability to remain undetected in a system for extended periods, often using zero-day exploits.", opts: ["True", "False"], correct: 0 },
+            { q: "Cybersecurity regulations such as GDPR and CCPA primarily focus on protecting critical infrastructure rather than individual personal data.", opts: ["True", "False"], correct: 1 },
+            { q: "A worm differs from a virus because it can self-replicate and spread independently across networks without needing to attach to a host program.", opts: ["True", "False"], correct: 0 },
+            { q: "Nation-state sponsored threat actors generally have limited resources and primarily use unsophisticated tactics like phishing.", opts: ["True", "False"], correct: 1 },
+            { q: "Whaling attacks are a form of phishing that specifically targets high-level executives within an organization.", opts: ["True", "False"], correct: 0 },
+            { q: "In cybersecurity risk management, risk is primarily determined by the inherent value of assets without considering the likelihood of threat exploitation.", opts: ["True", "False"], correct: 1 },
+            { q: "Insider threats can only be malicious actors deliberately exploiting their access and do not include negligent insiders who accidentally compromise security.", opts: ["True", "False"], correct: 1 },
+            { q: "The attack surface is defined as the total number of vulnerabilities within a system regardless of whether they are accessible to unauthorized users.", opts: ["True", "False"], correct: 1 },
+            { q: "The Morris Worm of 1988 was significant primarily because it was the first instance of a self-replicating malicious code that exploited network vulnerabilities without any user interaction.", opts: ["True", "False"], correct: 0 },
+            { q: "Advanced Persistent Threats (APTs) are characterized by their short duration and rapid execution designed to cause immediate visible damage.", opts: ["True", "False"], correct: 1 },
+            { q: "The primary motivation of hacktivists is financial gain, and their typical tactics include ransomware and phishing campaigns.", opts: ["True", "False"], correct: 1 },
+            { q: "Zero-day exploits refer to attacks that exploit known vulnerabilities for which patches have already been released but not yet applied by the victim.", opts: ["True", "False"], correct: 1 },
+            { q: "Insiders can pose security risks both through intentional malicious actions and unintentional negligent behaviors, such as falling victim to phishing attacks.", opts: ["True", "False"], correct: 0 },
+            { q: "Social engineering attacks rely predominantly on exploiting technical vulnerabilities in software rather than psychological manipulation of individuals.", opts: ["True", "False"], correct: 1 },
+            { q: "Nation-state sponsored threat actors often utilize high sophistication tactics including zero-day exploits and APTs to achieve strategic espionage and sabotage goals.", opts: ["True", "False"], correct: 0 },
+            { q: "The attack surface of a system is limited only to external network entry points and does not include software vulnerabilities or insider access points.", opts: ["True", "False"], correct: 1 },
+            { q: "Risk in cybersecurity is often quantified as the product of the likelihood of a threat exploiting a vulnerability and the impact this exploitation would have.", opts: ["True", "False"], correct: 0 },
+            { q: "Firewalls and Intrusion Prevention Systems (IPS) both function primarily by monitoring network traffic, but only IPS has the capability to block detected malicious activity.", opts: ["True", "False"], correct: 0 },
+            { q: "The Morris Worm of 1988 was significant primarily because it was the first instance of a self-replicating malicious code that highlighted the vulnerabilities of networked systems.", opts: ["True", "False"], correct: 0 },
+            { q: "Despite the ARPANET's development in the 1970s, security was a primary architectural consideration from its inception.", opts: ["True", "False"], correct: 1 },
+            { q: "Advanced Persistent Threats (APTs) are characterized by short-term, high-volume attacks designed to cause immediate damage rather than prolonged undetected presence.", opts: ["True", "False"], correct: 1 },
+            { q: "The economic impact of cyberattacks extends beyond direct financial losses to include legal liabilities and damage to organizational reputation.", opts: ["True", "False"], correct: 0 },
+            { q: "Cybersecurity regulations like GDPR and CCPA primarily focus on protecting individuals' personal data and privacy in digital environments.", opts: ["True", "False"], correct: 0 },
+            { q: "A worm, unlike a virus, requires user interaction to spread by attaching itself to legitimate programs.", opts: ["True", "False"], correct: 1 },
+            { q: "Zero-day exploits take advantage of vulnerabilities that are already known and patched by software vendors.", opts: ["True", "False"], correct: 1 },
+            { q: "Nation-state sponsored threat actors typically have high resource availability and often employ zero-day exploits and APT tactics to achieve strategic objectives.", opts: ["True", "False"], correct: 0 },
+            { q: "Negligent insiders pose a security risk through intentional sabotage and espionage within an organization.", opts: ["True", "False"], correct: 1 },
+            { q: "The risk in cybersecurity is commonly quantified as the product of the likelihood of a threat exploiting a vulnerability and the potential impact of that exploitation.", opts: ["True", "False"], correct: 0 },
+            { q: "The ARPANET, developed in the 1970s, was originally designed with strong security measures as a primary architectural consideration.", opts: ["True", "False"], correct: 1 },
+            { q: "Advanced Persistent Threats (APTs) are characterized by their prolonged and undetected presence within targeted systems, often utilizing zero-day exploits.", opts: ["True", "False"], correct: 0 },
+            { q: "According to the content, ransomware is classified as malware that encrypts files and demands payment for their release.", opts: ["True", "False"], correct: 0 },
+            { q: "Hacktivists typically leverage ransomware attacks to achieve their political or social objectives.", opts: ["True", "False"], correct: 1 },
+            { q: "Insiders who unintentionally compromise security due to negligence, such as falling for phishing attacks, are considered a significant threat actor category.", opts: ["True", "False"], correct: 0 },
+            { q: "The attack surface is defined as the sum of all possible points where an unauthorized user can attempt to enter or extract data, encompassing both system vulnerabilities and exposed interfaces.", opts: ["True", "False"], correct: 0 },
+            { q: "Spear phishing differs from general phishing in that it targets specific individuals within an organization, often using tailored information.", opts: ["True", "False"], correct: 0 },
+            { q: "The risk in cybersecurity is calculated solely based on the likelihood of a threat exploiting a vulnerability, without considering the impact of the event.", opts: ["True", "False"], correct: 1 },
+            { q: "Social engineering attacks exploit technical vulnerabilities in software systems rather than human psychology.", opts: ["True", "False"], correct: 1 },
+            { q: "Zero-day exploits refer to attacks that exploit vulnerabilities which are publicly known and have available patches.", opts: ["True", "False"], correct: 1 },
+            { q: "The Morris Worm of 1988 was significant primarily because it was the first instance of a self-replicating malicious code that exploited network vulnerabilities.", opts: ["True", "False"], correct: 0 },
+            { q: "During the 1970s ARPANET development, security was a primary focus in the network's architectural design.", opts: ["True", "False"], correct: 1 },
+            { q: "Advanced Persistent Threats (APTs) are characterized by short, high-impact attacks that are easily detectable.", opts: ["True", "False"], correct: 1 },
+            { q: "Supply chain attacks target vulnerabilities within third-party vendors or software providers to compromise a primary target.", opts: ["True", "False"], correct: 0 },
+            { q: "The General Data Protection Regulation (GDPR) and California Consumer Privacy Act (CCPA) are examples of regulations primarily designed to secure critical national infrastructure.", opts: ["True", "False"], correct: 1 },
+            { q: "A Trojan Horse malware type is distinguished by its ability to self-replicate and spread independently across networks.", opts: ["True", "False"], correct: 1 },
+            { q: "Zero-day exploits take advantage of known vulnerabilities for which patches or fixes are already available.", opts: ["True", "False"], correct: 1 },
+            { q: "Nation-state sponsored threat actors typically utilize zero-day exploits and advanced persistent threats to achieve strategic and long-term objectives.", opts: ["True", "False"], correct: 0 },
+            { q: "Whaling is a social engineering attack vector that indiscriminately targets a large number of users to maximize impact.", opts: ["True", "False"], correct: 1 },
+            { q: "Risk in cybersecurity management is quantitatively defined as the product of the likelihood of an event and the potential impact of that event.", opts: ["True", "False"], correct: 0 },
+            { q: "The Morris Worm of 1988 was significant because it was the first instance where security was a primary architectural consideration in network design.", opts: ["True", "False"], correct: 1 },
+            { q: "Advanced Persistent Threats (APTs) are characterized by their prolonged, stealthy nature and use of sophisticated techniques to remain undetected over long periods.", opts: ["True", "False"], correct: 0 },
+            { q: "According to the content, social engineering attacks like phishing primarily exploit system vulnerabilities rather than human psychology.", opts: ["True", "False"], correct: 1 },
+            { q: "Nation-state sponsored threat actors typically possess high resources and often utilize zero-day exploits in their strategic cyber espionage operations.", opts: ["True", "False"], correct: 0 },
+            { q: "Insider threats are always malicious in intent and do not include negligent behavior that inadvertently compromises security.", opts: ["True", "False"], correct: 1 },
+            { q: "The attack surface is defined as the total number of vulnerabilities present in a system's software code.", opts: ["True", "False"], correct: 1 },
+            { q: "Encryption serves the purpose of converting information into a code to prevent unauthorized access, thereby protecting data confidentiality.", opts: ["True", "False"], correct: 0 },
+            { q: "Baiting, a form of social engineering, involves inventing a fabricated scenario to deceive targets into revealing sensitive information.", opts: ["True", "False"], correct: 1 },
+            { q: "Risk in cybersecurity is often quantified as the product of the likelihood of a threat exploiting a vulnerability and the impact of that exploitation.", opts: ["True", "False"], correct: 0 },
+            { q: "Firewalls and Intrusion Prevention Systems (IPS) both actively block potential threats, whereas Intrusion Detection Systems (IDS) only monitor and alert without prevention capabilities.", opts: ["True", "False"], correct: 0 }
+        ];
+
+        // ensure we have 160 items
+        console.assert(QUESTIONS.length === 160, 'should be 160 questions');
+
+        // ----- state -----
+        let currentIndex = 0;
+        const totalQ = QUESTIONS.length;
+        const userAnswers = new Array(totalQ).fill(null); // store selected index (0..n-1)
+        const revealed = new Array(totalQ).fill(false);   // if answer was revealed
+
+        const qContainer = document.getElementById('questionContainer');
+        const qNumber = document.getElementById('qNumber');
+        const qText = document.getElementById('qText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const progressBadge = document.getElementById('progressBadge');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const quizArea = document.getElementById('quizArea');
+        const resultsArea = document.getElementById('resultsArea');
+        const finalScore = document.getElementById('finalScore');
+        const restartBtn = document.getElementById('restartBtn');
+        const infoMsg = document.getElementById('infoMessage');
+
+        function renderQuestion(index) {
+            const q = QUESTIONS[index];
+            if (!q) return;
+            qNumber.textContent = `Q${index+1}`;
+            qText.textContent = q.q;
+            progressBadge.textContent = `${index+1} / ${totalQ}`;
+
+            // build options
+            let html = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            const selectedIdx = userAnswers[index];
+            const isRevealed = revealed[index];
+
+            q.opts.forEach((optText, i) => {
+                let classes = 'opt';
+                if (selectedIdx === i) classes += ' selected';
+                if (isRevealed) {
+                    if (i === q.correct) classes += ' correct-reveal';
+                    else if (selectedIdx === i && i !== q.correct) classes += ' wrong-reveal';
+                    classes += ' disabled';
+                }
+                const checkedAttr = (selectedIdx === i) ? 'checked' : '';
+                html += `
+                    <div class="${classes}" data-optidx="${i}">
+                        <label>
+                            <input type="radio" name="question" value="${i}" ${checkedAttr} ${isRevealed ? 'disabled' : ''}>
+                            <span><span class="letter">${letters[i]}.</span> ${optText}</span>
+                        </label>
+                    </div>
+                `;
+            });
+            optionsContainer.innerHTML = html;
+
+            // attach click listeners (for selection)
+            if (!isRevealed) {
+                document.querySelectorAll('.opt input[type="radio"]').forEach((radio, idx) => {
+                    radio.addEventListener('change', function(e) {
+                        const val = parseInt(this.value);
+                        if (!isNaN(val)) {
+                            userAnswers[currentIndex] = val;
+                            renderQuestion(currentIndex); // re-render
+                        }
+                    });
+                });
+            }
+
+            // update button states
+            prevBtn.disabled = (index === 0);
+            nextBtn.textContent = (index === totalQ-1) ? 'Finish' : 'Next ▶';
+            infoMsg.textContent = isRevealed ? '✅ Answer revealed' : (selectedIdx !== null ? '✓ Answered' : '');
+        }
+
+        function goTo(index) {
+            if (index < 0) index = 0;
+            if (index >= totalQ) index = totalQ - 1;
+            currentIndex = index;
+            renderQuestion(currentIndex);
+            // scroll to top of card
+            qContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function submitQuiz() {
+            // reveal all answers
+            for (let i = 0; i < totalQ; i++) {
+                revealed[i] = true;
+            }
+            // compute score
+            let correct = 0;
+            for (let i = 0; i < totalQ; i++) {
+                if (userAnswers[i] !== null && userAnswers[i] === QUESTIONS[i].correct) correct++;
+            }
+            // show results
+            quizArea.classList.add('hidden');
+            resultsArea.classList.remove('hidden');
+            finalScore.textContent = correct;
+            // scroll to results
+            resultsArea.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            for (let i = 0; i < totalQ; i++) {
+                userAnswers[i] = null;
+                revealed[i] = false;
+            }
+            currentIndex = 0;
+            resultsArea.classList.add('hidden');
+            quizArea.classList.remove('hidden');
+            renderQuestion(0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // event listeners
+        prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex === totalQ - 1) {
+                // finish / submit
+                submitQuiz();
+            } else {
+                goTo(currentIndex + 1);
+            }
+        });
+
+        submitBtn.addEventListener('click', () => {
+            // confirm?
+            if (confirm('Submit all answers and see your score?')) {
+                submitQuiz();
+            }
+        });
+
+        restartBtn.addEventListener('click', restartQuiz);
+
+        // keyboard / touch friendly
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (currentIndex < totalQ - 1) goTo(currentIndex + 1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (currentIndex > 0) goTo(currentIndex - 1);
+            }
+        });
+
+        // init
+        renderQuestion(0);
+    })();
+</script>
+</body>
+</html>
